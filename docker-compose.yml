@@ -1,13 +1,28 @@
 version: '3.8'
 services:
   app:
-    build: .
-    container_name: vue-firebase
+    build: ./docker/app
+    container_name: app_container
     ports:
       - '8080:8080'
     dns:
      - '8.8.8.8'
     volumes:
-      - ./:/src
+      - ./app:/app
     stdin_open: true
     tty: true
+    environment:
+      TZ: Asia/Tokyo
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - 3306:3306
+    volumes:
+      - ./containers/db/character-set.cnf:/etc/mysql/conf.d/character-set.cnf
+      - db-store:/var/lib/mysql
+
+volumes:
+  log-data:
