@@ -1,3 +1,3 @@
 FROM node:16
-WORKDIR /src
+WORKDIR /app
 RUN npm install -g @vue/cli@5.0.6
