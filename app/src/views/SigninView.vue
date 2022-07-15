@@ -11,26 +11,33 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import type { Ref } from 'vue'
-import { useRouter } from 'vue-router'
-import type { Router } from 'vue-router'
-import { getAuth, signInWithEmailAndPassword  } from 'firebase/auth'
-import type {Auth} from 'firebase/auth'
-import OAuthButtons from '@/components/auth/OAuthButtons.vue'
+import { ref } from 'vue';
+import type { Ref } from 'vue';
+import { useRouter } from 'vue-router';
+import type { Router } from 'vue-router';
+import { getAuth, signInWithEmailAndPassword  } from 'firebase/auth';
+import type {Auth} from 'firebase/auth';
+import OAuthButtons from '@/components/auth/OAuthButtons.vue';
+import axios from 'axios';
 
-let mailaddress: Ref<string> = ref('')
-let password:    Ref<string> = ref('')
-const router: Router = useRouter()
+let mailaddress: Ref<string> = ref('');
+let password:    Ref<string> = ref('');
+const router: Router = useRouter();
 const auth: Auth = getAuth();
 const signUp = () => {
   signInWithEmailAndPassword (auth, mailaddress.value, password.value)
   .then(() => {
-    console.log('signin')
-    router.push('afterSignin')
+    // TODO: APIにアクセストークン送信
+    axios.post("url",{},{})
+      .then((res) => {
+        console.log('signin');
+        router.push('afterSignin');
+      }).catch((res)=> {
+        console.error(res);
+      });
   })
   .catch((error) => {
-    console.error(error.code + ': ' + error.message)
-  })
+    console.error(error.code + ': ' + error.message);
+  });
 }
 </script>

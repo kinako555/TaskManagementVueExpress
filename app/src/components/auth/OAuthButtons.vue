@@ -20,6 +20,7 @@ const googleAuth = () => {
     // This gives you a Google Access Token. You can use it to access the Google API.
     // const credential = GoogleAuthProvider.credentialFromResult(result)
     console.log('signin')
+    // TODO: APIにアクセストークン送信
     router.push('/afterSignin')
     // ...
   }).catch((error) => {
