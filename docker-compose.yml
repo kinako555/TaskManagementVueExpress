@@ -24,6 +24,7 @@ services:
     tty: true
     environment:
       CHOKIDAR_USEPOLLING: 1
+      GOOGLE_APPLICATION_CREDENTIALS: /api/config/vuefirebasefb-firebase-adminsdk.json
       TZ: Asia/Tokyo
     depends_on:
       - db
@@ -36,7 +37,7 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - ./dicker/db/cnf/character-set.cnf:/etc/mysql/conf.d/character-set.cnf
+      - ./docker/db/cnf/character-set.cnf:/etc/mysql/conf.d/character-set.cnf
       - db-store:/var/lib/mysql
 
 volumes:

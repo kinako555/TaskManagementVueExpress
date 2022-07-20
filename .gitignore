@@ -24,3 +24,6 @@ pnpm-debug.log*
 
 # Firebase
 firebase.js
+
+# api
+vuefirebasefb-firebase-adminsdk.json

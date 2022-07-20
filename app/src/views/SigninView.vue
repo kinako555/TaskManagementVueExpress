@@ -16,6 +16,7 @@ import type { Ref } from 'vue';
 import { useRouter } from 'vue-router';
 import type { Router } from 'vue-router';
 import { getAuth, signInWithEmailAndPassword  } from 'firebase/auth';
+import type { UserCredential } from 'firebase/auth';
 import type {Auth} from 'firebase/auth';
 import OAuthButtons from '@/components/auth/OAuthButtons.vue';
 import axios from 'axios';
@@ -26,9 +27,9 @@ const router: Router = useRouter();
 const auth: Auth = getAuth();
 const signUp = () => {
   signInWithEmailAndPassword (auth, mailaddress.value, password.value)
-  .then(() => {
+  .then((userCredential: UserCredential) => {
     // TODO: APIにアクセストークン送信
-    axios.post("url",{},{})
+    axios.post("http://localhost:8080/auth/signup",{access_token: userCredential.user.getIdToken},{})
       .then((res) => {
         console.log('signin');
         router.push('afterSignin');
