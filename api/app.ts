@@ -5,12 +5,24 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 
-import { initializeApp }  from "firebase-admin";
+import { initializeApp }  from "firebase-admin/app";
 
 import { router as indexRouter } from "./routes/index";
 import { router as usersRouter } from "./routes/users";
+// setting reflect-metadata (typeorm)
+import "reflect-metadata";
+import { AppDataSource } from "./data-source";
 
+// setting firebase
 initializeApp();
+
+// setting typeorm
+AppDataSource.initialize().then(() => {
+  // here you can start to work with your database
+}).catch(
+  (error) => console.log(error)
+);
+
 
 const app = express();
 
@@ -27,18 +39,20 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) =>
-    next(createHttpError(404))
+  next(createHttpError(404))
 );
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-    res.locals.message = err.message;
-    res.locals.error = req.app.get("env") === "development" ? err : {};
+  res.locals.message = err.message;
+  res.locals.error = req.app.get("env") === "development" ? err : {};
 
-    res.status(err.status || 500);
-    res.render("error");
+  res.status(err.status || 500);
+  res.render("error");
 });
-// 追加コード
+
+/*
 app.listen(3000,()=>{
-    console.log('start port to 3000')
+  console.log('start port to 3000')
 });
+*/
 
-module.exports = app;
+export {app};

@@ -7,6 +7,8 @@ export function signup(req: express.Request, res: express.Response) {
   .verifyIdToken(JWT_TOKEN)
   .then((decodedToken) => {
     const uid = decodedToken.uid;
+
+    // uid使ってユーザー作成
     res.send({uid: uid});
   })
   .catch((error) => {
