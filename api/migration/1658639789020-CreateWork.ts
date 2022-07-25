@@ -24,6 +24,7 @@ export class CreateWork1658639789020 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query(`DROP TABLE works`);
     }
 
 }

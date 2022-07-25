@@ -15,6 +15,7 @@ export class CreateWorkStatus1658675636827 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query(`DROP TABLE work_status`);
     }
 
 }
