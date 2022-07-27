@@ -27,11 +27,11 @@ const router: Router = useRouter()
 const auth: Auth = getAuth();
 const signup = () => {
   createUserWithEmailAndPassword (auth, mailaddress.value, password.value)
-  .then((userCredential: UserCredential) => {
-    // TODO: APIにアクセストークン送信
-    axios.post("http://localhost:3000/auth/signup",{access_token: userCredential.user.getIdToken},{})
+  .then(async (userCredential: UserCredential) => {
+    const idToken = await userCredential.user.getIdToken();
+    axios.post("/auth/signin",{idToken: idToken},{})
       .then((res) => {
-        console.log('signun');
+        console.log('signin');
         router.push('afterSignin');
       }).catch((res)=> {
         console.error(res);

@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { wrap } from "../routes/index"
+import { signin, oautnSignin } from "../controllers/authController";
 
 export const router = Router();
 
-const authController = require('../controllers/authController');
-
-router.post("/signup", wrap(authController.signup));
+router.post("/signin", wrap(signin));
+router.post("/oauthSignin", wrap(oautnSignin));

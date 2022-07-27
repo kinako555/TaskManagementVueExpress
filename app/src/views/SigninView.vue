@@ -28,9 +28,8 @@ const auth: Auth = getAuth();
 const signUp = () => {
   signInWithEmailAndPassword (auth, mailaddress.value, password.value)
   .then(async(userCredential: UserCredential) => {
-    // TODO: APIにアクセストークン送信
-    const access_token = await userCredential.user.getIdToken();
-    axios.post("http://localhost:3000/auth/signup",{access_token: access_token},{})
+    const idToken = await userCredential.user.getIdToken();
+    axios.post("/auth/signin",{idToken: idToken},{})
       .then((res) => {
         console.log('signin');
         router.push('afterSignin');
