@@ -4,11 +4,13 @@ import { Request, Response, NextFunction } from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
+import cors  from "cors";
 
 import { initializeApp }  from "firebase-admin/app";
 
 import { router as indexRouter } from "./routes/index";
 import { router as usersRouter } from "./routes/users";
+import { router as authRouter  } from "./routes/auth";
 // setting reflect-metadata (typeorm)
 import "reflect-metadata";
 import { AppDataSource } from "./data-source";
@@ -24,7 +26,6 @@ AppDataSource.initialize().then(() => {
   (error) => console.log(error)
 );
 
-
 const app = express();
 
 app.set("views", path.join(__dirname, "views"));
@@ -36,8 +37,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(cors({
+  origin: 'http://localhost:8080'
+}));
+
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/auth", authRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) =>
   next(createHttpError(404))
@@ -45,7 +51,7 @@ app.use((req: Request, res: Response, next: NextFunction) =>
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
-
+  console.error(err);
   res.status(err.status || 500);
   res.render("error");
 });

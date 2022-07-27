@@ -5,6 +5,7 @@ services:
     container_name: app_container
     ports:
       - '8080:8080'
+    command: npm run serve
     dns:
      - '8.8.8.8'
     volumes:

@@ -4,7 +4,7 @@ import { Work } from "./work"
 @Entity('users')
 export class User {
 
-  @PrimaryColumn({length: 30})
+  @PrimaryColumn({length: 50})
   id: string
   @Column({length: 50})
   name: string

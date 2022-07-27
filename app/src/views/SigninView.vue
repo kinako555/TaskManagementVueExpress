@@ -27,9 +27,10 @@ const router: Router = useRouter();
 const auth: Auth = getAuth();
 const signUp = () => {
   signInWithEmailAndPassword (auth, mailaddress.value, password.value)
-  .then((userCredential: UserCredential) => {
+  .then(async(userCredential: UserCredential) => {
     // TODO: APIにアクセストークン送信
-    axios.post("http://localhost:8080/auth/signup",{access_token: userCredential.user.getIdToken},{})
+    const access_token = await userCredential.user.getIdToken();
+    axios.post("http://localhost:3000/auth/signup",{access_token: access_token},{})
       .then((res) => {
         console.log('signin');
         router.push('afterSignin');
@@ -40,5 +41,5 @@ const signUp = () => {
   .catch((error) => {
     console.error(error.code + ': ' + error.message);
   });
-}
+};
 </script>

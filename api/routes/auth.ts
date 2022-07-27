@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { wrap } from "@/routes/index"
+import { wrap } from "../routes/index"
 
 export const router = Router();
 
