@@ -22,12 +22,12 @@ type SigninParam = {
 
 const googleAuth = () => {
   signInWithPopup(auth, provider)
-  .then((result) => {
+  .then(async(result) => {
     // This gives you a Google Access Token. You can use it to access the Google API.
     const credential = GoogleAuthProvider.credentialFromResult(result);
-    const signinParam: SigninParam = { idToken:    credential?.idToken, 
+    const idToken = await result.user.getIdToken();
+    const signinParam: SigninParam = { idToken:    idToken, 
                                        providerId: credential?.providerId };
-                                      
     axios.post("/auth/oauthSignin",signinParam,{})
       .then((res) => {
         console.log('signin');
