@@ -26,8 +26,9 @@ export async function oautnSignin(req:  express.Request,
     const auth: Auth = getAuth();
     const JWT_TOKEN:  string  = req.body.idToken;
     // const providerId: string  = req.body.providerId;
+    console.log("testssssfsafsa");
     const decodedToken: DecodedIdToken = await auth.verifyIdToken(JWT_TOKEN);
-    const userRecord: UserRecord = await auth.getUser(decodedToken.uid);
+    const userRecord: UserRecord       = await auth.getUser(decodedToken.uid);
     const user = await getOrCreateUser(userRecord.uid, userRecord.displayName);
     res.json({user});
   } catch (error) {

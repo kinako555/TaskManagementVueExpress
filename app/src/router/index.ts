@@ -38,22 +38,22 @@ const routes: Array<RouteRecordRaw> = [
     meta: { requiresAuth: true },
     component: () => import(/* webpackChunkName: "afterSignin" */ '../views/AfterSigninView.vue')
   }
-]
+];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
-})
+});
 
 /***
  * require login setting
  */
 router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-  const isRequiresAuth:    boolean = to.matched.some(recode => recode.meta.requiresAuth)
-  if (!isRequiresAuth) next()
+  const isRequiresAuth: boolean = to.matched.some(recode => recode.meta.requiresAuth);
+  if (!isRequiresAuth) next();
   onAuthStateChanged(getAuth(), (user) => {
     user ? next() : next({ path: "/signin", query: { redirect: to.fullPath } })
-  })
-})
+  });
+});
 
-export default router
+export default router;

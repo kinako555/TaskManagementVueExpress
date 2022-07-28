@@ -22,3 +22,11 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### attach server
+```
+# app
+docker attach app_container
+# api
+docker attach api_container
+```
