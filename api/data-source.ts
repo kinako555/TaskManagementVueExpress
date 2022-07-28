@@ -1,8 +1,8 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
 import { User } from "./entity/user"
-import { WorkStatus } from "./entity/workStatus"
-import { Work } from "./entity/work"
+import { TaskStatus } from "./entity/taskStatus"
+import { Task } from "./entity/task"
 
 export const AppDataSource = new DataSource({
     type: "mysql",
@@ -13,7 +13,7 @@ export const AppDataSource = new DataSource({
     database: "ExpressTest",
     synchronize: true,
     logging: false,
-    entities: [User, WorkStatus, Work],
+    entities: [User, TaskStatus, Task],
     migrations: ["./migration/*.ts"],
     subscribers: [],
 });

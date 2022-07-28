@@ -1,9 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, UpdateDateColumn, Timestamp, CreateDateColumn } from "typeorm"
 import { User } from "./user"
-import { WorkStatus } from "./workStatus"
+import { TaskStatus } from "./taskStatus"
 
-@Entity('works')
-export class Work {
+@Entity('tasks')
+export class Task {
 
   @PrimaryGeneratedColumn()
   id: number
@@ -11,16 +11,16 @@ export class Work {
   title: string
   @Column({nullable: true})
   content?: string
-  @ManyToOne(() => User, (user) => user.works, {
+  @ManyToOne(() => User, (user) => user.tasks, {
     nullable: false,
     cascade: ['remove','update']
   })
   user: User
-  @ManyToOne(() => WorkStatus, (workStatus: WorkStatus) => workStatus.works, {
+  @ManyToOne(() => TaskStatus, (taskStatus: TaskStatus) => taskStatus.tasks, {
     nullable: false,
     cascade: ['update']
   })
-  workStatus: WorkStatus
+  taskStatus: TaskStatus
   @CreateDateColumn({name: 'created_at'})
   createdAt: Timestamp
   @UpdateDateColumn({name: 'updated_at'})

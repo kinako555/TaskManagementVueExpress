@@ -1,5 +1,5 @@
 import { Entity, PrimaryColumn, Column, OneToMany, UpdateDateColumn, Timestamp, CreateDateColumn } from "typeorm"
-import { Work } from "./work"
+import { Task } from "./task"
 
 @Entity('users')
 export class User {
@@ -8,8 +8,8 @@ export class User {
   id: string
   @Column({length: 50})
   name: string
-  @OneToMany(() => Work, (work) => work.user)
-  works: Work[]
+  @OneToMany(() => Task, (task) => task.user)
+  tasks: Task[]
   @CreateDateColumn({name: 'created_at'})
   createdAt: Timestamp
   @UpdateDateColumn({name: 'updated_at'})
