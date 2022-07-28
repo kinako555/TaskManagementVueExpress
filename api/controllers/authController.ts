@@ -24,9 +24,8 @@ export async function oautnSignin(req:  express.Request,
                                   next: express.NextFunction): Promise<void>{
   try {
     const auth: Auth = getAuth();
-    const JWT_TOKEN:  string  = req.body.idToken;
+    const JWT_TOKEN: string  = req.body.idToken;
     // const providerId: string  = req.body.providerId;
-    console.log("testssssfsafsa");
     const decodedToken: DecodedIdToken = await auth.verifyIdToken(JWT_TOKEN);
     const userRecord: UserRecord       = await auth.getUser(decodedToken.uid);
     const user = await getOrCreateUser(userRecord.uid, userRecord.displayName);
@@ -40,6 +39,6 @@ async function getOrCreateUser(id: string, userName: string = "test"): Promise<U
   const userRepository: Repository<User> = AppDataSource.getRepository(User);
   let user: User|null = await userRepository.findOneBy({id: id});
   if (user) return user;
-  user = userRepository.create({id: id, name: userName});
+  user = await userRepository.save({id: id, name: userName});
   return user;
 }

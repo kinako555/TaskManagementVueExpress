@@ -5,7 +5,8 @@ import HomeView from '../views/HomeView.vue'
 
 /***
  * meta
- * requiresAuth   : ログインしていないとアクセスできないページ
+ * requiresAuth    : ログインしていないとアクセスできないページ
+ * notRequiresAuth : ログインしているとアクセスできないページ
  */
 
 const routes: Array<RouteRecordRaw> = [
@@ -25,11 +26,13 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/signup',
     name: 'signup',
+    meta: { notRequiresAuth: true },
     component: () => import(/* webpackChunkName: "signup" */ '../views/SignupView.vue')
   },
   {
     path: '/signin',
     name: 'signin',
+    meta: { notRequiresAuth: true },
     component: () => import(/* webpackChunkName: "signin" */ '../views/SigninView.vue')
   },
   {
@@ -49,10 +52,16 @@ const router = createRouter({
  * require login setting
  */
 router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-  const isRequiresAuth: boolean = to.matched.some(recode => recode.meta.requiresAuth);
-  if (!isRequiresAuth) next();
+  const isRequiresAuth: boolean    = to.matched.some(recode => recode.meta.requiresAuth);
+  const isNotRequiresAuth: boolean = to.matched.some(recode => recode.meta.notRequiresAuth);
+  if (!isRequiresAuth && !isNotRequiresAuth) next(); // ログイン状況の指定のないページ
   onAuthStateChanged(getAuth(), (user) => {
-    user ? next() : next({ path: "/signin", query: { redirect: to.fullPath } })
+    if (user) {
+      if (isNotRequiresAuth) next({ path: "/afterSignin", query: { redirect: to.fullPath } });
+    } else {
+      if (isRequiresAuth) next({ path: "/signin", query: { redirect: to.fullPath } });
+    }
+    next();
   });
 });
 
