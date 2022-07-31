@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   app:
-    build: ./docker/app
+    build: ./app
     container_name: app_container
     ports:
       - '8080:8080'
@@ -18,7 +18,7 @@ services:
 
   api:
     container_name: api_container
-    build: ./docker/api
+    build: ./api
     ports:
       - 3000:3000
     command: npm start
@@ -40,7 +40,7 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - ./docker/db/cnf/character-set.cnf:/etc/mysql/conf.d/character-set.cnf
+      - ./db/cnf/character-set.cnf:/etc/mysql/conf.d/character-set.cnf
       - db-store:/var/lib/mysql
 
 volumes:
