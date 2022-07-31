@@ -10,9 +10,18 @@ export class User {
   name: string
   @OneToMany(() => Task, (task) => task.user)
   tasks: Task[]
+  @Column({name: 'provider_id'})
+  providerId: string
+  @Column({name: 'delete_flg', 
+           type: 'bit', 
+           length: 1,
+           default: 0})
+  deleteFlg: boolean
   @CreateDateColumn({name: 'created_at'})
   createdAt: Timestamp
   @UpdateDateColumn({name: 'updated_at'})
   updatedAt: Timestamp
+  @Column({name: 'deleted_at'})
+  deletedAt: Date
 
 }
