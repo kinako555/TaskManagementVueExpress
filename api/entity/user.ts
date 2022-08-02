@@ -6,7 +6,12 @@ import { Task } from "./task"
 export class User {
 
   static DeleteFlgValue = { "TRUE":  Buffer.alloc(1, 1), /* 論理削除済 */
-                            "FALSE": Buffer.alloc(1, 0) /* 論理未削除*/ }
+                            "FALSE": Buffer.alloc(1, 0) /* 論理未削除*/ };
+
+  public isActive(): boolean {
+    const deleteFlg: Boolean = Boolean(this.deleteFlg.readInt8());
+    return !deleteFlg;
+  }
 
   @PrimaryColumn({length: 50})
   id: string;
@@ -29,9 +34,4 @@ export class User {
            default: null,
            nullable: true})
   deletedAt: string;
-
-  public isActive(): boolean {
-     const deleteFlg: Boolean = Boolean(this.deleteFlg.readInt8());
-    return !deleteFlg;
-  }
 }

@@ -12,11 +12,11 @@ export async function signin(req:  express.Request,
     const JWT_TOKEN: string = req.body.idToken;
     const decodedToken: DecodedIdToken = await getAuth().verifyIdToken(JWT_TOKEN);
     const uid = decodedToken.uid;
-    const user = await getOrCreateUser(uid, "original", "test");
+    const user = await getOrCreateUser(uid, 'original', 'test');
     if (user.isActive()) {
       res.json({user});
     } else {
-      res.render("index", { title: "Not Active User" });
+      res.render('index', { title: 'Not Active User' });
     }
   } catch (error) {
     next(error);
@@ -36,17 +36,18 @@ export async function oautnSignin(req:  express.Request,
     if (user.isActive()) {
       res.json({user});
     } else {
-      res.render("index", { title: "Not Active User" });
+      res.render('index', { title: 'Not Active User' });
     }
   } catch (error) {
     next(error);
   }
 }
 
-async function getOrCreateUser(id: string, providerId: string, userName: string = "test"): Promise<User> {
+async function getOrCreateUser(id: string, providerId: string, userName: string = 'test'): Promise<User> {
   const userRepository: Repository<User> = AppDataSource.getRepository(User);
-  let user: User|null = await userRepository.findOneBy({id: id});
-  if (user) return user;
-  user = await userRepository.save({id: id, name: userName, providerId: providerId});
-  return user;
+  let findUser: User|null = await userRepository.findOneBy({id: id});
+  if (findUser) return findUser;
+  let createdUser: User = userRepository.create({id: id, name: userName, providerId: providerId});
+  await userRepository.insert(createdUser);
+  return createdUser;
 }
