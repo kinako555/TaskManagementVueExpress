@@ -1,5 +1,7 @@
 import { Router } from "express";
+import { wrap } from "../routes/index"
+import { deleteUser } from "../controllers/userController";
 
 export const router = Router();
 
-router.get("/", (req, res, next) => res.send('respond with a resource'));
+router.patch('/delete', wrap(deleteUser));

@@ -13,7 +13,11 @@ export async function signin(req:  express.Request,
     const decodedToken: DecodedIdToken = await getAuth().verifyIdToken(JWT_TOKEN);
     const uid = decodedToken.uid;
     const user = await getOrCreateUser(uid, "original", "test");
-    res.json({user});
+    if (user.isActive()) {
+      res.json({user});
+    } else {
+      res.render("index", { title: "Not Active User" });
+    }
   } catch (error) {
     next(error);
   }
@@ -29,7 +33,11 @@ export async function oautnSignin(req:  express.Request,
     const decodedToken: DecodedIdToken = await auth.verifyIdToken(JWT_TOKEN);
     const userRecord: UserRecord       = await auth.getUser(decodedToken.uid);
     const user = await getOrCreateUser(userRecord.uid, providerId, userRecord.displayName);
-    res.json({user});
+    if (user.isActive()) {
+      res.json({user});
+    } else {
+      res.render("index", { title: "Not Active User" });
+    }
   } catch (error) {
     next(error);
   }
