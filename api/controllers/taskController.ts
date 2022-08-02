@@ -1,18 +1,23 @@
 import { getAuth } from "firebase-admin/auth";
 import * as express from "express";
-import type { Repository } from 'typeorm'
-import { AppDataSource } from '../data-source'
-import { User } from '../entity/user'
-import type { Auth, DecodedIdToken, UserRecord } from "firebase-admin/auth";
+import type { Repository } from 'typeorm';
+import { AppDataSource } from '../data-source';
+import { Task } from '../entity/task';
+import { TaskStatus } from "../entity/taskStatus";
+import type { DecodedIdToken } from "firebase-admin/auth";
 
-export async function list(req:  express.Request, 
-                             res:  express.Response, 
-                             next: express.NextFunction): Promise<void>{
+export async function getTasks(req:  express.Request, 
+                               res:  express.Response, 
+                               next: express.NextFunction): Promise<void>{
   try {
-    const userRepository: Repository<User> = AppDataSource.getRepository(User);
+    const taskRepository: Repository<Task> = AppDataSource.getRepository(Task);
+    const taskStatusRepository: Repository<TaskStatus> = AppDataSource.getRepository(TaskStatus);
     const decodedToken: DecodedIdToken = await getAuth().verifyIdToken(req.body.idToken);
-    let user: User = await userRepository.findOneByOrFail({id: decodedToken.id});
-    res.json({tasks: user.tasks});
+
+    const tasks: Task[]               = await taskRepository.findBy({user: {id: decodedToken.id}});
+    const allTaskStatus: TaskStatus[] = await taskStatusRepository.find();
+    res.json({tasks: tasks,
+              taskStatus: allTaskStatus});
   } catch (error) {
     next(error);
   }
