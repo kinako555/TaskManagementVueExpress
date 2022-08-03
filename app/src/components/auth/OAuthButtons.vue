@@ -9,7 +9,7 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import type {Auth} from 'firebase/auth';
 import { useRouter } from 'vue-router';
 import type { Router } from 'vue-router';
-import axios from 'axios';
+import { axiosIncludedIdToken as axios } from '@/services/axiosIncludedIdToken';
 
 const router: Router               = useRouter()
 const auth: Auth                   = getAuth()
@@ -25,9 +25,7 @@ const googleAuth = () => {
   .then(async(result) => {
     // This gives you a Google Access Token. You can use it to access the Google API.
     const credential = GoogleAuthProvider.credentialFromResult(result);
-    const idToken = await result.user.getIdToken();
-    const signinParam: SigninParam = { idToken:    idToken, 
-                                       providerId: credential?.providerId };
+    const signinParam: SigninParam = { providerId: credential?.providerId };
     axios.post("/auth/oauthSignin",signinParam,{})
       .then((res) => {
         console.log('signin');

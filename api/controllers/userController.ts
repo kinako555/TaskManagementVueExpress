@@ -10,8 +10,8 @@ export async function deleteUser(req:  express.Request,
                                  res:  express.Response, 
                                  next: express.NextFunction): Promise<void>{
   try {
-    const JWT_TOKEN: string = req.body.idToken;
-    const decodedToken: DecodedIdToken = await getAuth().verifyIdToken(JWT_TOKEN);
+    const idToken: any = req.headers.authorization;
+    const decodedToken: DecodedIdToken = await getAuth().verifyIdToken(idToken);
     const uid = decodedToken.uid;
     const userRepository: Repository<User> = AppDataSource.getRepository(User);
     let user = await userRepository.findOneByOrFail({id: uid, deleteFlg: User.DeleteFlgValue['FALSE']});
