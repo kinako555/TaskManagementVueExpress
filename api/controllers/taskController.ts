@@ -14,8 +14,8 @@ export async function getTasks(req:  express.Request,
     const taskStatusRepository: Repository<TaskStatus> = AppDataSource.getRepository(TaskStatus);
     const idToken: any = req.headers.authorization;
     const decodedToken: DecodedIdToken = await getAuth().verifyIdToken(idToken);
-    const tasks: Task[]               = await taskRepository.findBy({user: {id: decodedToken.id}});
-    const allTaskStatus: TaskStatus[] = await taskStatusRepository.find();
+    const tasks: Task[]                = await taskRepository.findBy({user: {id: decodedToken.uid}});
+    const allTaskStatus: TaskStatus[]  = await taskStatusRepository.find();
     res.json({tasks: tasks,
               taskStatus: allTaskStatus});
   } catch (error) {

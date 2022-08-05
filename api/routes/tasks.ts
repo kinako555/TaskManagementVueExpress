@@ -1,8 +1,7 @@
 import { Router } from "express";
 import { wrap } from "../routes/index"
-import { signin, oautnSignin } from "../controllers/authController";
+import { getTasks } from "../controllers/taskController";
 
 export const router = Router();
 
-// router.post("/signin", wrap(signin));
-// router.post("/oauthSignin", wrap(oautnSignin));
+router.get("/", wrap(getTasks));

@@ -11,6 +11,7 @@ import { initializeApp }  from "firebase-admin/app";
 import { router as indexRouter } from "./routes/index";
 import { router as usersRouter } from "./routes/users";
 import { router as authRouter  } from "./routes/auth";
+import { router as taskRouter  } from "./routes/tasks";
 // setting reflect-metadata (typeorm)
 import "reflect-metadata";
 import { AppDataSource } from "./data-source";
@@ -44,6 +45,7 @@ app.use(cors({
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/auth", authRouter);
+app.use("/tasks", taskRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) =>
   next(createHttpError(404))
