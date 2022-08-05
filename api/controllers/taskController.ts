@@ -14,8 +14,13 @@ export async function getTasks(req:  express.Request,
     const taskStatusRepository: Repository<TaskStatus> = AppDataSource.getRepository(TaskStatus);
     const idToken: any = req.headers.authorization;
     const decodedToken: DecodedIdToken = await getAuth().verifyIdToken(idToken);
-    const tasks: Task[]                = await taskRepository.findBy({user: {id: decodedToken.uid}});
-    const allTaskStatus: TaskStatus[]  = await taskStatusRepository.find();
+    const tasks: Task[]                = await taskRepository.find({select:['id', 'title','content','startDate','endDate','user'], where: {user: {id: decodedToken.uid}}});
+    const _allTaskStatus = await taskStatusRepository.find() // Map変換前の一時使用変数
+    const allTaskStatus: Map<number, TaskStatus> = new Map<number, TaskStatus>();
+    _allTaskStatus.map((x: TaskStatus) =>allTaskStatus.set(x.id, x)); // 配列からMapに変換
+
+    
+
     res.json({tasks: tasks,
               taskStatus: allTaskStatus});
   } catch (error) {
