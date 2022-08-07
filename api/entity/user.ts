@@ -1,4 +1,3 @@
-import { Hash } from "crypto";
 import { Entity, PrimaryColumn, Column, OneToMany, UpdateDateColumn, Timestamp, CreateDateColumn } from "typeorm"
 import { Task } from "./task"
 
@@ -23,7 +22,7 @@ export class User {
   providerId: string;
   @Column({name: 'delete_flg', 
            type: 'bit',
-           default: "b'0'"})
+           default: () =>`b'0'`})
   deleteFlg: Buffer;
   @CreateDateColumn({name: 'created_at'})
   createdAt: Timestamp;
