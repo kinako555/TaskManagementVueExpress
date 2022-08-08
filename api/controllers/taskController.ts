@@ -26,7 +26,7 @@ export async function getTasks(req:  express.Request,
     const allTaskStatus: Map<number, TaskStatus> = new Map<number, TaskStatus>();
     _allTaskStatus.map((x: TaskStatus) =>allTaskStatus.set(x.id, x)); // 配列からMapに変換
     res.json({tasks: tasks,
-              taskStatus: allTaskStatus});
+              taskStatus: Object.fromEntries(allTaskStatus)});// MapをJsonに加工するのに必要な処理);
   } catch (error) {
     next(error);
   }

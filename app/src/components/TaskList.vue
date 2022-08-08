@@ -1,23 +1,22 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import type { Ref } from "vue";
 import { axiosIncludedIdToken as axios } from '../services/axiosIncludedIdToken';
 
-let tasks: any = ref([]);
-let taskStatus: any = ref(null);
+let tasks: Ref<any>      = ref([]);
+let taskStatus: Ref<any> = ref(null);
 
 axios.get('/tasks')
   .then((res) => {
     tasks.value       = res.data.tasks;
     taskStatus.value  = res.data.taskStatus;
-    console.log(tasks.value);
     console.log('get tasks');
   }).catch((error) =>{
     console.error(error.code + ": " + error.message);
   });
 
-function getTaskStatusName(taskId: string): string {
-  if (taskStatus.value == null) return "";
-  return taskStatus.value.get(taskId).name;
+function getTaskStatusName(taskStatusId: string): string {
+  return taskStatus.value[taskStatusId].name;
 }
 
 </script>
@@ -41,7 +40,7 @@ function getTaskStatusName(taskId: string): string {
           <td>Contentボタンの予定</td>
           <td>{{ task.startDate }}</td>
           <td>{{ task.endDate }}</td>
-          <td>{{getTaskStatusName(task.taskStatus)}}</td>
+          <td>{{getTaskStatusName(task.taskStatusId)}}</td>
           <td>ボタンの予定</td>
         </tr>
       </tbody>
