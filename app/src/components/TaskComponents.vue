@@ -1,5 +1,6 @@
 <template>
   <div class="taskComponents">
+    <button type="button" class="btn btn-success" @click="openCreateTaskModal">create task</button>
     <TaskList :tasks="tasks" :getTaskStatusName="getTaskStatusName"/>
   </div>
 </template>
@@ -26,6 +27,10 @@ axios.get('/tasks')
 
 function getTaskStatusName(taskStatusId: string): string {
   return taskStatus.value[taskStatusId].name;
+}
+
+function openCreateTaskModal() {
+  return;
 }
 
 </script>

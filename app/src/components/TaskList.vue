@@ -10,7 +10,6 @@ defineProps(['tasks', 'getTaskStatusName']);
 
 <template>
   <div class="taskList">
-     <button type="button" class="btn btn-success">create task</button>
     <table>
       <thead>
         <td>No</td>
