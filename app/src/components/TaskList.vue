@@ -1,28 +1,16 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { defineProps, defineEmits } from "vue";
 import type { Ref } from "vue";
-import { axiosIncludedIdToken as axios } from '../services/axiosIncludedIdToken';
+// import { axiosIncludedIdToken as axios } from '../services/axiosIncludedIdToken';
 
-let tasks: Ref<any>      = ref([]);
-let taskStatus: Ref<any> = ref(null);
-
-axios.get('/tasks')
-  .then((res) => {
-    tasks.value       = res.data.tasks;
-    taskStatus.value  = res.data.taskStatus;
-    console.log('get tasks');
-  }).catch((error) =>{
-    console.error(error.code + ": " + error.message);
-  });
-
-function getTaskStatusName(taskStatusId: string): string {
-  return taskStatus.value[taskStatusId].name;
-}
+defineProps(['tasks', 'getTaskStatusName']);
+// const getTaskStatusName = defineEmits(['getTaskStatusName']);
 
 </script>
 
 <template>
   <div class="taskList">
+     <button type="button" class="btn btn-success">create task</button>
     <table>
       <thead>
         <td>No</td>

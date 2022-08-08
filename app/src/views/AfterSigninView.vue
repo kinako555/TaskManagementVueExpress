@@ -3,7 +3,7 @@
     <h1>Success!!</h1>
     <SignoutButton/>
     <DeleteUserButton/>
-    <TaskList/>
+    <TaskComponents/>
   </div>
 </template>
 
@@ -11,6 +11,6 @@
 <script setup lang="ts">
 import SignoutButton from '@/components/auth/SignoutButton.vue'
 import DeleteUserButton from '@/components/DeleteUserButton.vue'
-import TaskList from '@/components/TaskList.vue';
+import TaskComponents from '@/components/TaskComponents.vue'
 
 </script>
