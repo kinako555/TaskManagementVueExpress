@@ -5,14 +5,18 @@ import { Task } from "./task"
 export class TaskStatus {
 
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
+
   @Column({length: 20})
-  name: string
+  name: string;
+
   @OneToMany(() => Task, (task: Task) => task.taskStatus)
-  tasks: Task[]
+  tasks: Task[];
+
   @CreateDateColumn({name: 'created_at'})
-  createdAt: Timestamp
+  createdAt: Timestamp;
+
   @UpdateDateColumn({name: 'updated_at'})
-  updatedAt: Timestamp
+  updatedAt: Timestamp;
 
 }

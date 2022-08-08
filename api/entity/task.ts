@@ -1,7 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, UpdateDateColumn, Timestamp, CreateDateColumn, JoinColumn, RelationId } from "typeorm"
-import { User } from "./user"
-import { TaskStatus } from "./taskStatus"
-import { userInfo } from "os";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, UpdateDateColumn, Timestamp, CreateDateColumn, JoinColumn, RelationId } from "typeorm";
+import { User } from "./user";
+import { TaskStatus } from "./taskStatus";
 
 @Entity('tasks')
 export class Task {
@@ -29,8 +28,8 @@ export class Task {
   @JoinColumn({ name: 'task_status_id' })
   taskStatus: TaskStatus;
 
-  @RelationId((task: Task) => task.taskStatus)
-  taskStatusId: number
+  @Column({ name: 'task_status_id' })
+  taskStatusId: number;
 
   @Column({name: 'start_date',
            type: 'date',
