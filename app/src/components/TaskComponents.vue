@@ -4,7 +4,7 @@
       add task
     </button>
     <TaskList :tasks="tasks" :getTaskStatusName="getTaskStatusName"/>
-    <TaskCreateModal :taskStatus="taskStatus" ref="taskCreateModal"/>
+    <TaskCreateModal :taskStatus="taskStatus" @addTask="addTask" ref="taskCreateModal"/>
   </div>
 </template>
 
@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import TaskList from '@/components/TaskList.vue';
 import TaskCreateModal from './TaskCreateModal.vue';
-import { ref, defineEmits } from "vue";
+import { ref } from "vue";
 import type { Ref } from "vue";
 import { axiosIncludedIdToken as axios } from '../services/axiosIncludedIdToken';
 
@@ -34,5 +34,9 @@ function getTaskStatusName(taskStatusId: string): string {
 
 function getCreateTaskModalId() {
   return taskCreateModal.value.modalId;
+}
+
+function addTask(task: any){
+  return;
 }
 </script>
