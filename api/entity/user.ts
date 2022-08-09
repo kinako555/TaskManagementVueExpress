@@ -14,20 +14,27 @@ export class User {
 
   @PrimaryColumn({length: 50})
   id: string;
+
   @Column({length: 50})
   name: string;
+
   @OneToMany(() => Task, (task) => task.user)
   tasks: Task[];
+
   @Column({name: 'provider_id'})
   providerId: string;
+
   @Column({name: 'delete_flg', 
            type: 'bit',
            default: () =>`b'0'`})
   deleteFlg: Buffer;
+
   @CreateDateColumn({name: 'created_at'})
   createdAt: Timestamp;
+
   @UpdateDateColumn({name: 'updated_at'})
   updatedAt: Timestamp;
+  
   @Column({name: 'deleted_at',
            type: 'datetime',
            default: null,

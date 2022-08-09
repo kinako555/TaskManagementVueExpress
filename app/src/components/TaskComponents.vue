@@ -37,6 +37,7 @@ function getCreateTaskModalId() {
 }
 
 function addTask(task: any){
+  tasks.value.push(task);
   return;
 }
 </script>

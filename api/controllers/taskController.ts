@@ -31,3 +31,62 @@ export async function getTasks(req:  express.Request,
     next(error);
   }
 }
+
+export async function createTask(req:  express.Request, 
+                                 res:  express.Response, 
+                                 next: express.NextFunction): Promise<void>{
+  try {
+    const idToken: any = req.headers.authorization;
+    const decodedToken: DecodedIdToken = await getAuth().verifyIdToken(idToken);
+    const taskRepository: Repository<Task> = AppDataSource.getRepository(Task);
+    let createTask: CreateTask = formatCreateTask(req.body.task, decodedToken.uid);
+    let result = await taskRepository.insert(createTask);
+    const resTask: ResponseTask = formatResponseTask(createTask,  result.identifiers[0].id);
+    res.json({createdTask: resTask});
+  } catch (error) {
+    next(error); 
+  }
+}
+
+function formatCreateTask(reqestTask: any, uid: string){
+  const rtn: CreateTask = {
+    user: {id: uid},
+    title: reqestTask.title,
+    taskStatusId: reqestTask.taskStatusId,
+    startDate: reqestTask.startDate,
+    endDate: reqestTask.endDate,
+    content: reqestTask.content,
+  }
+  return rtn;
+}
+
+function formatResponseTask(task: any, id?: number) {
+  const rtn: ResponseTask = {
+    id: 0,
+    title: task.title,
+    taskStatusId: task.taskStatusId,
+    startDate: task.startDate,
+    endDate: task.endDate,
+    content: task.content,
+  }
+  rtn.id = id ? id : task.id;
+  return rtn;
+}
+
+interface CreateTask {
+  user: {id: string},
+  title: string,
+  taskStatusId: number,
+  startDate: string,
+  endDate: string,
+  content: string,
+};
+
+interface ResponseTask {
+  id: number,
+  title: string,
+  taskStatusId: number,
+  startDate: string,
+  endDate: string,
+  content: string,
+};

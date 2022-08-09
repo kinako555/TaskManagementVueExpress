@@ -19,7 +19,7 @@ export class Task {
     cascade: ['remove','update']
   })
   @JoinColumn({ name: 'user_id' })
-  readonly user: User;
+  user: User;
 
   @ManyToOne(() => TaskStatus, (taskStatus: TaskStatus) => taskStatus.tasks, {
     nullable: false,
