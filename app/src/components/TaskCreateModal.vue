@@ -5,10 +5,22 @@ import { axiosIncludedIdToken as axios } from '../services/axiosIncludedIdToken'
 import { Modal } from 'bootstrap';
 
 const modalId = 'createTaskModal';
-defineExpose({modalId});
+let modal: any;
+
+
+/* モーダル表示実装側でこの関数を参照してください */
+const openModal: Ref<()=> void> = ref(() => {
+  clearFormValues();
+  modal = new Modal(document.getElementById('createTaskModal') as HTMLElement);
+  modal.show();
+});
+
+defineExpose({openModal});
 
 defineProps(['taskStatus']);
+
 const emit = defineEmits(['addTask']);
+
 
 const title: Ref<string>        = ref('');
 const taskStatusId: Ref<string> = ref('');
@@ -16,8 +28,16 @@ const startDate: Ref<Date|null> = ref(null);
 const endDate: Ref<Date|null>   = ref(null);
 const content: Ref<string>      = ref('');
 
+function clearFormValues() {
+  title.value        = ''
+  taskStatusId.value = '';
+  startDate.value    = null;
+  endDate.value      = null;
+  content.value      = '';
+}
+
 function closeModal(){
-  
+  modal.hide();
 }
 
 function submit(){
@@ -31,7 +51,6 @@ function submit(){
     }
   };
   axios.post('/tasks/create', formData).then((res) => {
-    closeModal();
     console.log('create task');
     emit('addTask', res.data.createdTask);
     closeModal();

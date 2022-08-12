@@ -1,6 +1,6 @@
 <template>
   <div class="taskComponents">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" :data-bs-target="'#'+getCreateTaskModalId()">
+    <button type="button" class="btn btn-primary" @click="openCreateTaskModal()">
       add task
     </button>
     <TaskList :tasks="tasks" :getTaskStatusName="getTaskStatusName"/>
@@ -16,6 +16,8 @@ import { ref } from "vue";
 import type { Ref } from "vue";
 import { axiosIncludedIdToken as axios } from '../services/axiosIncludedIdToken';
 
+let taskCreateModal =ref({modalId: null, openModal: ()=>{return}});
+
 let tasks: Ref<any>      = ref([]);
 let taskStatus: Ref<any> = ref(null);
 axios.get('/tasks')
@@ -26,18 +28,18 @@ axios.get('/tasks')
   }).catch((error) =>{
     console.error(error.code + ": " + error.message);
   });
-let taskCreateModal =ref({modalId: null})
 
 function getTaskStatusName(taskStatusId: string): string {
   return taskStatus.value[taskStatusId].name;
 }
 
-function getCreateTaskModalId() {
-  return taskCreateModal.value.modalId;
+function openCreateTaskModal(): void {
+  taskCreateModal.value.openModal();
 }
 
 function addTask(task: any){
   tasks.value.push(task);
   return;
 }
+
 </script>
