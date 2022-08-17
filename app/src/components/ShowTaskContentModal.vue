@@ -34,13 +34,13 @@ function closeModal(): void{
     <div class="modal fade" :id="modalId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header">
+          <div class="modal-header ms-5">
             <h5 class="modal-title" id="exampleModalLabel">{{title}}</h5>
             <button type="button" class="btn-close" aria-label="Close" @click="closeModal"></button>
           </div>
-          <div class="modal-body">
-            content<br/>
-            {{content}}
+          <div class="modal-body ms-5 me-5">
+            <div class="col-12 text-start">content</div>
+            <div class="col-12 text-start">{{content}}</div>
           </div>
         </div>
       </div>

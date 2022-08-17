@@ -71,28 +71,28 @@ function submit(value: any, {resetForm}: any): void{
       <div :id="modalId" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header ms-5">
               <h5 class="modal-title" id="staticBackdropLabel">edit task</h5>
               <button type="reset" class="btn-close" aria-label="Close" @click="closeModal"></button>
             </div>
-            <div class="modal-body">
-                <label>title</label><br/>
-                <Field name="title" type="text" v-model="title" maxlength="50" :rules="taskValidates.titleValidates"/><br/>
-                <ErrorMessage name="title" class="text-danger"/>
-                <label>status</label><br/>
-                <select v-model="taskStatusId">
+            <div class="modal-body ms-5 me-5">
+                <label class="col-12 text-start">title</label><br/>
+                <Field name="title" class="col-12" type="text" v-model="title" maxlength="50" :rules="taskValidates.titleValidates"/><br/>
+                <ErrorMessage name="title" class="text-danger col-12"/>
+                <label class="col-12 text-start">status</label><br/>
+                <select class="col-12" v-model="taskStatusId">
                   <option v-for="ts in taskStatus" :key="ts.id" :value="ts.id">{{ts.name}}</option>
                 </select><br/>
-                <label>start date</label><br/>
-                <Field name="startDate" type="date" v-model="startDate"/><br/>
-                <label>end date</label><br/>
-                <Field name="endDate" type="date" v-model="endDate" rules="endDateValidate:@startDate"/><br/>
-                <ErrorMessage name="endDate" class="text-danger"/>
-                <label>content</label><br/>
-                <textarea v-model="content" maxlength="255"></textarea><br/>
+                <label class="col-12 text-start">start date</label><br/>
+                <Field name="startDate" class="col-12" type="date" v-model="startDate"/><br/>
+                <label class="col-12 text-start">end date</label><br/>
+                <Field name="endDate" class="col-12" type="date" v-model="endDate" rules="endDateValidate:@startDate"/><br/>
+                <ErrorMessage name="endDate" class="text-danger col-12"/>
+                <label class="col-12 text-start">content</label><br/>
+                <textarea class="col-12" v-model="content" maxlength="255"></textarea><br/>
             </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">edit</button>
+            <div class="modal-footer ms-5 me-5">
+              <button type="submit" class="btn btn-primary w-100">edit</button>
             </div>
           </div>
         </div>
