@@ -12,6 +12,7 @@
     "bootstrap": "^5.2.0",
     "core-js": "^3.8.3",
     "firebase": "^9.8.4",
+    "vee-validate": "^4.6.5",
     "vue": "^3.2.13",
     "vue-class-component": "^8.0.0-0",
     "vue-router": "^4.0.3"
