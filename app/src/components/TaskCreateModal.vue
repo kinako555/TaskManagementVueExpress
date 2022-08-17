@@ -30,7 +30,7 @@ const startDate: Ref<Date|null> = ref(null);
 const endDate: Ref<Date|null>   = ref(null);
 const content: Ref<string>      = ref('');
 
-function clearFormValues() {
+function clearFormValues(): void{
   title.value        = '';
   taskStatusId.value = notCompatibleTaskStatusId;
   startDate.value    = null;
@@ -38,12 +38,12 @@ function clearFormValues() {
   content.value      = '';
 }
 
-function closeModal(){
+function closeModal(): void{
   modal.hide();
 }
 
 /* 第一引数は使用していないがvee validateの仕様のため設定 */
-function submit(value: any, {resetForm}: any){
+function submit(value: any, {resetForm}: any): void{
   const formData = {
     task: {
       title: title.value,

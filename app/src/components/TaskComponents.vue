@@ -3,7 +3,7 @@
     <button type="button" class="btn btn-primary" @click="openCreateTaskModal()">
       add task
     </button>
-    <TaskList :tasks="tasks" :getTaskStatusName="getTaskStatusName"/>
+    <TaskList :tasks="tasks" :getTaskStatusName="getTaskStatusName" @deleteTask="deleteTask"/>
     <TaskCreateModal :taskStatus="taskStatus" @addTask="addTask" ref="taskCreateModal"/>
   </div>
 </template>
@@ -37,9 +37,12 @@ function openCreateTaskModal(): void {
   taskCreateModal.value.openModal();
 }
 
-function addTask(task: any){
+function addTask(task: any): void{
   tasks.value[task.id] = task;
-  return;
+}
+
+function deleteTask(taskId: string): void {
+  delete tasks.value[taskId];
 }
 
 </script>

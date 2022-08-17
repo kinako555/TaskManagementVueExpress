@@ -1,10 +1,19 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from "vue";
-
-// import { axiosIncludedIdToken as axios } from '../services/axiosIncludedIdToken';
+import { axiosIncludedIdToken as axios } from '../services/axiosIncludedIdToken';
 
 defineProps(['tasks', 'getTaskStatusName']);
-// const getTaskStatusName = defineEmits(['getTaskStatusName']);
+const emit = defineEmits(['deleteTask']);
+
+function deleteTask(taskId: string): void {
+  axios.delete('/tasks/'+taskId).then((res) => {
+    console.log('delete task');
+    emit('deleteTask', taskId);
+  }).catch((error) => {
+    console.error(error);
+    alert('登録に失敗しました プラウザをリロードしてください');
+  });
+}
 
 </script>
 
@@ -21,14 +30,14 @@ defineProps(['tasks', 'getTaskStatusName']);
         <td>-</td>
       </thead>
       <tbody>
-        <tr v-for="(task, i) in tasks" :key="task.id">
-          <td>{{ i }}</td>
+        <tr v-for="(task, key, i) in tasks" :key="task.id">
+          <td>{{ Number(i)+1 }}</td>
           <td>{{ task.title }}</td>
           <td>Contentボタンの予定</td>
           <td>{{ task.startDate }}</td>
           <td>{{ task.endDate }}</td>
           <td>{{getTaskStatusName(task.taskStatusId)}}</td>
-          <td>ボタンの予定</td>
+          <td><button @click="deleteTask(task.id)">delete</button></td>
         </tr>
       </tbody>
     </table>

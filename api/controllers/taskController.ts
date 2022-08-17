@@ -1,6 +1,6 @@
 import { getAuth } from "firebase-admin/auth";
 import * as express from "express";
-import type { Repository, FindOptionsSelect } from 'typeorm';
+import type { Repository, FindOptionsSelect, DeleteResult } from 'typeorm';
 import { AppDataSource } from '../data-source';
 import { Task } from '../entity/task';
 import { TaskStatus } from "../entity/taskStatus";
@@ -50,6 +50,23 @@ export async function createTask(req:  express.Request,
   }
 }
 
+export async function deleteTask(req:  express.Request, 
+                                 res:  express.Response, 
+                                 next: express.NextFunction): Promise<void>{
+    try {
+      const idToken: any = req.headers.authorization;
+      const decodedToken: DecodedIdToken = await getAuth().verifyIdToken(idToken);
+      const deleteTaskId: number = Number(req.params.taskId);
+      const taskRepository: Repository<Task> = AppDataSource.getRepository(Task);
+      const result: DeleteResult = await taskRepository.delete({id: deleteTaskId, user: {id: decodedToken.uid}});
+      if (!result.affected) res.status(400);
+      res.json({message: "task delete success"})
+    } catch (error) {
+      next(error);
+    }
+}
+
+
 function formatCreateTask(reqestTask: any, uid: string){
   const rtn: CreateTask = {
     user: {id: uid},
@@ -82,7 +99,7 @@ interface CreateTask {
   startDate: string,
   endDate: string,
   content: string,
-};
+}
 
 interface ResponseTask {
   id: number,
@@ -91,4 +108,4 @@ interface ResponseTask {
   startDate: string,
   endDate: string,
   content: string,
-};
+}
