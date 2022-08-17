@@ -3,7 +3,7 @@ import { defineProps, defineEmits } from "vue";
 import { axiosIncludedIdToken as axios } from '../services/axiosIncludedIdToken';
 
 defineProps(['tasks', 'getTaskStatusName']);
-const emit = defineEmits(['deleteTask']);
+const emit = defineEmits(['deleteTask', 'editTask']);
 
 function deleteTask(taskId: string): void {
   axios.delete('/tasks/'+taskId).then((res) => {
@@ -13,6 +13,10 @@ function deleteTask(taskId: string): void {
     console.error(error);
     alert('登録に失敗しました プラウザをリロードしてください');
   });
+}
+
+function editTask(taskId: string) {
+  emit('editTask', taskId);
 }
 
 </script>
@@ -37,7 +41,7 @@ function deleteTask(taskId: string): void {
           <td>{{ task.startDate }}</td>
           <td>{{ task.endDate }}</td>
           <td>{{getTaskStatusName(task.taskStatusId)}}</td>
-          <td><button @click="deleteTask(task.id)">delete</button></td>
+          <td><button @click="editTask(task.id)">edit</button><button @click="deleteTask(task.id)">delete</button></td>
         </tr>
       </tbody>
     </table>

@@ -1,22 +1,13 @@
-<template>
-  <div class="taskComponents">
-    <button type="button" class="btn btn-primary" @click="openCreateTaskModal()">
-      add task
-    </button>
-    <TaskList :tasks="tasks" :getTaskStatusName="getTaskStatusName" @deleteTask="deleteTask"/>
-    <TaskCreateModal :taskStatus="taskStatus" @addTask="addTask" ref="taskCreateModal"/>
-  </div>
-</template>
-
-
 <script setup lang="ts">
 import TaskList from '@/components/TaskList.vue';
 import TaskCreateModal from './TaskCreateModal.vue';
+import TaskEditModal from './TaskEditModal.vue';
 import { ref } from "vue";
 import type { Ref } from "vue";
 import { axiosIncludedIdToken as axios } from '../services/axiosIncludedIdToken';
 
-let taskCreateModal =ref({modalId: null, openModal: ()=>{return}});
+const taskCreateModal = ref({openModal: ()=>{return}});
+const taskEditModal = ref({openModal: (task: any)=>{return}});
 
 let tasks: Ref<any>      = ref({});
 let taskStatus: Ref<any> = ref(null);
@@ -37,7 +28,15 @@ function openCreateTaskModal(): void {
   taskCreateModal.value.openModal();
 }
 
+function editTask(taskId: string): void {
+  taskEditModal.value.openModal(tasks.value[taskId]);
+}
+
 function addTask(task: any): void{
+  tasks.value[task.id] = task;
+}
+
+function updateTask(task: any): void {
   tasks.value[task.id] = task;
 }
 
@@ -46,3 +45,14 @@ function deleteTask(taskId: string): void {
 }
 
 </script>
+
+<template>
+  <div class="taskComponents">
+    <button type="button" class="btn btn-primary" @click="openCreateTaskModal()">
+      add task
+    </button>
+    <TaskList :tasks="tasks" :getTaskStatusName="getTaskStatusName" @deleteTask="deleteTask" @editTask="editTask"/>
+    <TaskCreateModal :taskStatus="taskStatus" @addTask="addTask" ref="taskCreateModal"/>
+    <TaskEditModal :taskStatus="taskStatus" @updateTask="updateTask" ref="taskEditModal"/>
+  </div>
+</template>

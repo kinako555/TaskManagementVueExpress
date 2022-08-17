@@ -1,0 +1,102 @@
+<script setup lang="ts">
+import { defineExpose, defineProps, ref, defineEmits } from "vue";
+import type { Ref } from "vue";
+import { axiosIncludedIdToken as axios } from '../services/axiosIncludedIdToken';
+import { Modal } from 'bootstrap';
+import { Form, Field, ErrorMessage } from 'vee-validate';
+import { taskValidates } from '../services/validates';
+
+const modalId = 'editTaskModal';
+let modal: any;
+
+/* モーダル表示実装側でこの関数を参照してください */
+const openModal: Ref<(task: any)=> void> = ref((task) => {
+  setDefaultValues(task);
+  modal = new Modal(document.getElementById(modalId) as HTMLElement);
+  modal.show();
+});
+
+defineExpose({openModal});
+
+const props = defineProps(['taskStatus']);
+const emit = defineEmits(['updateTask']);
+
+let taskId: string;
+const title: Ref<string>        = ref('');
+const taskStatusId: Ref<string> = ref('');
+const startDate: Ref<Date|null> = ref(null);
+const endDate: Ref<Date|null>   = ref(null);
+const content: Ref<string>      = ref('');
+
+function setDefaultValues(editTask: any): void{
+  taskId             = editTask.id;
+  title.value        = editTask.title;
+  taskStatusId.value = editTask.taskStatusId;
+  startDate.value    = editTask.startDate;
+  endDate.value      = editTask.endDate;
+  content.value      = editTask.content;
+}
+
+function closeModal(): void{
+  modal.hide();
+}
+
+/* 第一引数は使用していないがvee validateの仕様のため設定 */
+function submit(value: any, {resetForm}: any): void{
+  const formData = {
+    task: {
+      title: title.value,
+      taskStatusId: taskStatusId.value,
+      startDate: startDate.value,
+      endDate: endDate.value,
+      content: content.value
+    }
+  };
+  axios.patch('/tasks/'+taskId, formData).then((res) => {
+    console.log('update task');
+    emit('updateTask', res.data.updatedTask);
+    closeModal();
+    resetForm();
+  }).catch((error) => {
+    console.error(error);
+    alert('登録に失敗しました プラウザをリロードしてください');
+  });
+}
+
+</script>
+
+<template>
+  <div class="taskEditModal">
+    <Form @submit="submit">
+      <div :id="modalId" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">edit task</h5>
+              <button type="reset" class="btn-close" aria-label="Close" @click="closeModal"></button>
+            </div>
+            <div class="modal-body">
+                <label>title</label><br/>
+                <Field name="title" type="text" v-model="title" maxlength="50" :rules="taskValidates.titleValidates"/><br/>
+                <ErrorMessage name="title" class="text-danger"/>
+                <label>status</label><br/>
+                <select v-model="taskStatusId">
+                  <option v-for="ts in taskStatus" :key="ts.id" :value="ts.id">{{ts.name}}</option>
+                </select><br/>
+                <label>start date</label><br/>
+                <Field name="startDate" type="date" v-model="startDate"/><br/>
+                <label>end date</label><br/>
+                <Field name="endDate" type="date" v-model="endDate" rules="endDateValidate:@startDate"/><br/>
+                <ErrorMessage name="endDate" class="text-danger"/>
+                <label>content</label><br/>
+                <textarea v-model="content" maxlength="255"></textarea><br/>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">edit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Form>
+  </div>
+</template>

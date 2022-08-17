@@ -1,6 +1,6 @@
 import { getAuth } from "firebase-admin/auth";
 import * as express from "express";
-import type { Repository, FindOptionsSelect, DeleteResult } from 'typeorm';
+import type { Repository, FindOptionsSelect, DeleteResult, UpdateResult } from 'typeorm';
 import { AppDataSource } from '../data-source';
 import { Task } from '../entity/task';
 import { TaskStatus } from "../entity/taskStatus";
@@ -50,6 +50,27 @@ export async function createTask(req:  express.Request,
   }
 }
 
+export async function updateTask(req:  express.Request, 
+                                 res:  express.Response, 
+                                 next: express.NextFunction): Promise<void>{
+  
+  try {
+    const idToken: any = req.headers.authorization;
+    const decodedToken: DecodedIdToken = await getAuth().verifyIdToken(idToken);
+    const updateTaskId: number = Number(req.params.taskId);
+    const updateTaskParams = formatUpdateTask(req.body.task);
+    const taskRepository: Repository<Task> = AppDataSource.getRepository(Task);
+    const result: UpdateResult = await taskRepository.update({id: updateTaskId, user: { id: decodedToken.uid }}, 
+                                                              updateTaskParams);
+    if (!result.affected) res.status(400); // 更新時のエラーは例外処理になるはず
+    const responseTask: ResponseTask = formatResponseTask(updateTaskParams, updateTaskId)
+    res.json({updatedTask: responseTask});
+  } catch (error) {
+    next(error);
+  }
+  
+}
+
 export async function deleteTask(req:  express.Request, 
                                  res:  express.Response, 
                                  next: express.NextFunction): Promise<void>{
@@ -60,7 +81,7 @@ export async function deleteTask(req:  express.Request,
       const taskRepository: Repository<Task> = AppDataSource.getRepository(Task);
       const result: DeleteResult = await taskRepository.delete({id: deleteTaskId, user: {id: decodedToken.uid}});
       if (!result.affected) res.status(400);
-      res.json({message: "task delete success"})
+      res.json({message: "task delete success"});
     } catch (error) {
       next(error);
     }
@@ -70,6 +91,17 @@ export async function deleteTask(req:  express.Request,
 function formatCreateTask(reqestTask: any, uid: string){
   const rtn: CreateTask = {
     user: {id: uid},
+    title: reqestTask.title,
+    taskStatusId: reqestTask.taskStatusId,
+    startDate: reqestTask.startDate,
+    endDate: reqestTask.endDate,
+    content: reqestTask.content,
+  }
+  return rtn;
+}
+
+function formatUpdateTask(reqestTask: any){
+  const rtn: UpdateTask = {
     title: reqestTask.title,
     taskStatusId: reqestTask.taskStatusId,
     startDate: reqestTask.startDate,
@@ -94,6 +126,14 @@ function formatResponseTask(task: any, id?: number) {
 
 interface CreateTask {
   user: {id: string},
+  title: string,
+  taskStatusId: number,
+  startDate: string,
+  endDate: string,
+  content: string,
+}
+
+interface UpdateTask {
   title: string,
   taskStatusId: number,
   startDate: string,
