@@ -7,6 +7,10 @@ import { defineRule } from 'vee-validate';
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap";
 
+import "@fortawesome/fontawesome-free/css/fontawesome.css"
+import "@fortawesome/fontawesome-free/css/brands.css"
+import "@fortawesome/fontawesome-free/css/solid.css"
+
 initializeFirebase();
 
 createApp(App).use(router).mount('#app');

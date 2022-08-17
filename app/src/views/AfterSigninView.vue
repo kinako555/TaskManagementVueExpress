@@ -1,6 +1,6 @@
 <template>
   <div class="afterSignin">
-    <h1>Success!!</h1>
+    <h1>Task Management Site</h1>
     <SignoutButton/>
     <DeleteUserButton/>
     <TaskComponents/>

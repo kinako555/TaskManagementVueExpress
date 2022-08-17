@@ -26,27 +26,29 @@ function showTaskContent(taskId: string): void {
 </script>
 
 <template>
-  <div class="taskList">
+  <div class="taskList ms-5 me-5 w-100">
     <h1>Task List</h1>
-    <table class="w-100">
+    <table class="table w-100">
       <thead>
-        <td>No</td>
-        <td>Title</td>
-        <td>Content</td>
-        <td>Start_date</td>
-        <td>End_date</td>
-        <td>Status</td>
-        <td>-</td>
+        <tr>
+          <th scope="col">No</th>
+          <th scope="col">Title</th>
+          <th scope="col">Content</th>
+          <th scope="col">Start_date</th>
+          <th scope="col">End_date</th>
+          <th scope="col">Status</th>
+          <th scope="col">-</th>
+        </tr>
       </thead>
       <tbody>
         <tr v-for="(task, key, i) in tasks" :key="task.id">
-          <td>{{ Number(i)+1 }}</td>
+          <th scope="row">{{ Number(i)+1 }}</th>
           <td>{{ task.title }}</td>
-          <td><button @click="showTaskContent(task.id)">content</button></td>
+          <td><i class="fa-solid fa-crop-simple" @click="showTaskContent(task.id)"></i></td>
           <td>{{ task.startDate }}</td>
           <td>{{ task.endDate }}</td>
           <td>{{getTaskStatusName(task.taskStatusId)}}</td>
-          <td><button @click="editTask(task.id)">edit</button><button @click="deleteTask(task.id)">delete</button></td>
+          <td><i class="fa-solid fa-pen me-5" @click="editTask(task.id)"></i><i class="fa-solid fa-xmark" @click="deleteTask(task.id)"></i></td>
         </tr>
       </tbody>
     </table>
