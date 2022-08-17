@@ -20,12 +20,14 @@ export async function getTasks(req:  express.Request,
                                                         startDate: true, 
                                                         endDate: true, 
                                                         taskStatusId: true};
-    const tasks: Task[] = await taskRepository.find({select: taskSelectColumns, 
-                                                     where: {user: {id: decodedToken.uid}}});
-    const _allTaskStatus = await taskStatusRepository.find({select: {id: true, name: true}}) // Map変換前の一時使用変数
+    const _tasks: Task[] = await taskRepository.find({select: taskSelectColumns, 
+                                                      where: {user: {id: decodedToken.uid}}}); // Map変換前の一時使用変数
+    const tasks: Map<number, Task> = new Map<number, Task>();
+    _tasks.map((x: Task) =>tasks.set(x.id, x)); // 配列からMapに変換
+    const _allTaskStatus = await taskStatusRepository.find({select: {id: true, name: true}}); // Map変換前の一時使用変数
     const allTaskStatus: Map<number, TaskStatus> = new Map<number, TaskStatus>();
     _allTaskStatus.map((x: TaskStatus) =>allTaskStatus.set(x.id, x)); // 配列からMapに変換
-    res.json({tasks: tasks,
+    res.json({tasks: Object.fromEntries(tasks),
               taskStatus: Object.fromEntries(allTaskStatus)});// MapをJsonに加工するのに必要な処理);
   } catch (error) {
     next(error);

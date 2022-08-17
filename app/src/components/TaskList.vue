@@ -22,7 +22,7 @@ defineProps(['tasks', 'getTaskStatusName']);
       </thead>
       <tbody>
         <tr v-for="(task, i) in tasks" :key="task.id">
-          <td>{{ i+1 }}</td>
+          <td>{{ i }}</td>
           <td>{{ task.title }}</td>
           <td>Contentボタンの予定</td>
           <td>{{ task.startDate }}</td>

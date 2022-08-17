@@ -18,7 +18,7 @@ import { axiosIncludedIdToken as axios } from '../services/axiosIncludedIdToken'
 
 let taskCreateModal =ref({modalId: null, openModal: ()=>{return}});
 
-let tasks: Ref<any>      = ref([]);
+let tasks: Ref<any>      = ref({});
 let taskStatus: Ref<any> = ref(null);
 axios.get('/tasks')
   .then((res) => {
@@ -38,7 +38,7 @@ function openCreateTaskModal(): void {
 }
 
 function addTask(task: any){
-  tasks.value.push(task);
+  tasks.value[task.id] = task;
   return;
 }
 
