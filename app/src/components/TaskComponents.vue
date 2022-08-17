@@ -2,12 +2,14 @@
 import TaskList from '@/components/TaskList.vue';
 import TaskCreateModal from './TaskCreateModal.vue';
 import TaskEditModal from './TaskEditModal.vue';
+import ShowTaskContentModal from './ShowTaskContentModal.vue';
 import { ref } from "vue";
 import type { Ref } from "vue";
 import { axiosIncludedIdToken as axios } from '../services/axiosIncludedIdToken';
 
-const taskCreateModal = ref({openModal: ()=>{return}});
-const taskEditModal = ref({openModal: (task: any)=>{return}});
+const taskCreateModal      = ref({openModal: ()=>{return}});
+const taskEditModal        = ref({openModal: (task: any)=>{return}});
+const showTaskContentModal = ref({openModal: (task: any)=>{return}});
 
 let tasks: Ref<any>      = ref({});
 let taskStatus: Ref<any> = ref(null);
@@ -26,6 +28,10 @@ function getTaskStatusName(taskStatusId: string): string {
 
 function openCreateTaskModal(): void {
   taskCreateModal.value.openModal();
+}
+
+function showTaskContent(taskId: string): void {
+  showTaskContentModal.value.openModal(tasks.value[taskId]);
 }
 
 function editTask(taskId: string): void {
@@ -51,8 +57,10 @@ function deleteTask(taskId: string): void {
     <button type="button" class="btn btn-primary" @click="openCreateTaskModal()">
       add task
     </button>
-    <TaskList :tasks="tasks" :getTaskStatusName="getTaskStatusName" @deleteTask="deleteTask" @editTask="editTask"/>
+    <TaskList :tasks="tasks" :getTaskStatusName="getTaskStatusName" 
+              @deleteTask="deleteTask" @editTask="editTask" @showTaskContent="showTaskContent" />
     <TaskCreateModal :taskStatus="taskStatus" @addTask="addTask" ref="taskCreateModal"/>
     <TaskEditModal :taskStatus="taskStatus" @updateTask="updateTask" ref="taskEditModal"/>
+    <ShowTaskContentModal ref="showTaskContentModal"/>
   </div>
 </template>
