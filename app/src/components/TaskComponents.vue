@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import TaskList from '@/components/TaskList.vue';
+import TaskSearchTextBox from '@/components/TaskSearchTextBox.vue';
 import TaskCreateModal from './TaskCreateModal.vue';
 import TaskEditModal from './TaskEditModal.vue';
 import ShowTaskContentModal from './ShowTaskContentModal.vue';
@@ -21,6 +22,10 @@ axios.get('/tasks')
   }).catch((error) =>{
     console.error(error.code + ": " + error.message);
   });
+
+function setTasks(_tasks: any): void {
+  tasks.value = _tasks;
+}
 
 function getTaskStatusName(taskStatusId: string): string {
   return taskStatus.value[taskStatusId].name;
@@ -53,14 +58,25 @@ function deleteTask(taskId: string): void {
 </script>
 
 <template>
-  <div class="taskComponents">
-    <button type="button" class="btn btn-primary" @click="openCreateTaskModal()">
-      add task
-    </button>
-    <TaskList :tasks="tasks" :getTaskStatusName="getTaskStatusName" 
-              @deleteTask="deleteTask" @editTask="editTask" @showTaskContent="showTaskContent" />
-    <TaskCreateModal :taskStatus="taskStatus" @addTask="addTask" ref="taskCreateModal"/>
-    <TaskEditModal :taskStatus="taskStatus" @updateTask="updateTask" ref="taskEditModal"/>
-    <ShowTaskContentModal ref="showTaskContentModal"/>
+<div class="taskComponents container">
+  <div class="row">
+    <span class="col-12"><h1>Task List</h1></span>
   </div>
+  <div class="row">
+    <span class="col-2">
+      <i class="fa-light fa-plus fa-2xl" @click="openCreateTaskModal()"></i>
+    </span>
+    <span class="col-8">
+      <TaskSearchTextBox @setTasks="setTasks"/>
+    </span>
+    <span class="col-2">
+
+    </span>
+  </div>
+  <TaskList :tasks="tasks" :getTaskStatusName="getTaskStatusName" 
+            @deleteTask="deleteTask" @editTask="editTask" @showTaskContent="showTaskContent" />
+  <TaskCreateModal :taskStatus="taskStatus" @addTask="addTask" ref="taskCreateModal"/>
+  <TaskEditModal :taskStatus="taskStatus" @updateTask="updateTask" ref="taskEditModal"/>
+  <ShowTaskContentModal ref="showTaskContentModal"/>
+</div>
 </template>

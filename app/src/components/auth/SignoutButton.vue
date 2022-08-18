@@ -1,7 +1,5 @@
 <template>
-  <div class="signoutButton">
-    <button @click="signout">Signout</button>
-  </div>
+<a class="signoutButton dropdown-item" @click="signout">Signout</a>
 </template>
 
 <script setup lang="ts">

@@ -1,7 +1,5 @@
 <template>
-  <div class="deleteUserButton">
-    <button @click="deleteUser">delete user</button>
-  </div>
+<a class="deleteUserButton dropdown-item" @click="deleteUser">Delete user</a>
 </template>
 
 <script setup lang="ts">

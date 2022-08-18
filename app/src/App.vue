@@ -1,8 +1,10 @@
+<script setup lang="ts">
+import CommonHeader from '@/components/CommonHeader.vue'
+
+</script>
+
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
+  <CommonHeader/>
   <router-view/>
 </template>
 

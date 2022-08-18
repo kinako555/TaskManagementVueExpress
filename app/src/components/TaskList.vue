@@ -27,15 +27,14 @@ function showTaskContent(taskId: string): void {
 
 <template>
   <div class="taskList ms-5 me-5 w-100">
-    <h1>Task List</h1>
     <table class="table w-100">
       <thead>
         <tr>
           <th scope="col">No</th>
           <th scope="col">Title</th>
           <th scope="col">Content</th>
-          <th scope="col">Start_date</th>
-          <th scope="col">End_date</th>
+          <th scope="col">Start Date</th>
+          <th scope="col">End Date</th>
           <th scope="col">Status</th>
           <th scope="col">-</th>
         </tr>

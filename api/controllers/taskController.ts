@@ -1,6 +1,7 @@
 import { getAuth } from "firebase-admin/auth";
 import * as express from "express";
-import type { Repository, FindOptionsSelect, DeleteResult, UpdateResult } from 'typeorm';
+import { Like } from 'typeorm';
+import type { Repository, FindOptionsSelect, FindOptionsWhere ,DeleteResult, UpdateResult } from 'typeorm';
 import { AppDataSource } from '../data-source';
 import { Task } from '../entity/task';
 import { TaskStatus } from "../entity/taskStatus";
@@ -20,8 +21,10 @@ export async function getTasks(req:  express.Request,
                                                         startDate: true, 
                                                         endDate: true, 
                                                         taskStatusId: true};
-    const _tasks: Task[] = await taskRepository.find({select: taskSelectColumns, 
-                                                      where: {user: {id: decodedToken.uid}}}); // Map変換前の一時使用変数
+    let taskWhereColumns: FindOptionsWhere<Task> = formatFindOptionsWhere(req.query);                                       
+    taskWhereColumns['user'] = {id: decodedToken.uid};
+    // Map変換前の一時使用変数
+    const _tasks: Task[] = await taskRepository.find({select: taskSelectColumns, where:  taskWhereColumns});
     const tasks: Map<number, Task> = new Map<number, Task>();
     _tasks.map((x: Task) =>tasks.set(x.id, x)); // 配列からMapに変換
     const _allTaskStatus = await taskStatusRepository.find({select: {id: true, name: true}}); // Map変換前の一時使用変数
@@ -85,6 +88,15 @@ export async function deleteTask(req:  express.Request,
     } catch (error) {
       next(error);
     }
+}
+
+/* 指定がない項目はwhere条件に設定しない */
+function formatFindOptionsWhere(queryParameter: any) :FindOptionsWhere<Task> {
+  let findOptionWhere: FindOptionsWhere<Task> = {};
+  const title: string = queryParameter.title;
+  console.log(title);
+  if (title) findOptionWhere['title'] = Like("%"+title+"%");
+  return findOptionWhere;
 }
 
 
