@@ -20,11 +20,14 @@ import type {Auth} from 'firebase/auth'
 import OAuthButtons from '@/components/auth/OAuthButtons.vue'
 import { axiosIncludedIdToken as axios } from '@/services/axiosIncludedIdToken';
 import type { UserCredential } from 'firebase/auth';
+import { useStore } from '@/store';
 
 let mailaddress: Ref<string> = ref('')
 let password:    Ref<string> = ref('')
 const router: Router = useRouter()
 const auth: Auth = getAuth();
+const store = useStore();
+
 const signup = () => {
   createUserWithEmailAndPassword (auth, mailaddress.value, password.value)
   .then(async (userCredential: UserCredential) => {

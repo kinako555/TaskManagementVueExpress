@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import SignoutButton from '@/components/auth/SignoutButton.vue'
+import SignoutButton from '@/components/auth/SignoutButton.vue';
 import DeleteUserButton from '@/components/DeleteUserButton.vue';
+import { useStore } from '@/store';
+
+const store = useStore();
+
 </script>
 
 <template>
@@ -9,7 +13,7 @@ import DeleteUserButton from '@/components/DeleteUserButton.vue';
     <span class="navbar-text offset-2 col-8">
       Task Management Site
     </span>
-    <div class="nav-item dropdown col-2">
+    <div class="nav-item dropdown col-2" v-if="store.getters.isSignin">
       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         <i class="fa-solid fa-user"></i>
       </a>

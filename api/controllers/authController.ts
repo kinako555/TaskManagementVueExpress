@@ -14,7 +14,7 @@ export async function signin(req:  express.Request,
     const uid = decodedToken.uid;
     const user = await getOrCreateUser(uid, 'original', 'test');
     if (user.isActive()) {
-      res.json({user});
+      res.json({uid: user.id});
     } else {
       res.render('index', { title: 'Not Active User' });
     }
@@ -34,7 +34,7 @@ export async function oautnSignin(req:  express.Request,
     const userRecord: UserRecord       = await auth.getUser(decodedToken.uid);
     const user = await getOrCreateUser(userRecord.uid, providerId, userRecord.displayName);
     if (user.isActive()) {
-      res.json({user});
+      res.json({uid: user.id});
     } else {
       res.render('index', { title: 'Not Active User' });
     }
