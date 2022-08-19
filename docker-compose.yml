@@ -15,6 +15,7 @@ services:
     environment:
       TZ: Asia/Tokyo
       VUE_APP_API_ENDPOINT: http://localhost:3000
+      NODE_ENV: develop
 
   api:
     container_name: api_container
@@ -29,6 +30,7 @@ services:
       CHOKIDAR_USEPOLLING: 1
       GOOGLE_APPLICATION_CREDENTIALS: /api/config/vuefirebasefb-firebase-adminsdk.json
       TZ: Asia/Tokyo
+      NODE_ENV: develop
     depends_on:
       - db
 

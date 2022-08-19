@@ -4,7 +4,6 @@ import type { Ref } from "vue";
 import { axiosIncludedIdToken as axios } from '../services/axiosIncludedIdToken';
 import { Modal } from 'bootstrap';
 import { Form, Field, ErrorMessage } from 'vee-validate';
-import { taskValidates } from '../services/validates';
 
 const modalId = 'createTaskModal';
 let modal: any;
@@ -77,20 +76,20 @@ function submit(value: any, {resetForm}: any): void{
               <button type="reset" class="btn-close" aria-label="Close" @click="closeModal"></button>
             </div>
             <div class="modal-body ms-5 me-5">
-                <label class="col-12 text-start">title</label>
-                <Field name="title" class="col-12" type="text" v-model="title" maxlength="50" :rules="taskValidates.titleValidates"/><br/>
-                <ErrorMessage name="title" class="text-danger col-12"/>
-                <label class="col-12 text-start">status</label><br/>
-                <select class="col-12" v-model="taskStatusId">
-                  <option v-for="ts in taskStatus" :key="ts.id" :value="ts.id">{{ts.name}}</option>
-                </select><br/>
-                <label class="col-12 text-start">start date</label><br/>
-                <Field name="startDate" class="col-12" type="date" v-model="startDate"/><br/>
-                <label class="col-12 text-start">end date</label><br/>
-                <Field name="endDate" class="col-12" type="date" v-model="endDate" rules="endDateValidate:@startDate"/><br/>
-                <ErrorMessage name="endDate" class="text-danger col-12"/>
-                <label class="col-12 text-start">content</label><br/>
-                <textarea class="col-12" v-model="content" maxlength="255"></textarea><br/>
+              <label class="col-12 text-start">title</label>
+              <Field name="title" class="col-12" type="text" v-model="title" maxlength="50" rules="required"/>
+              <ErrorMessage name="title" class="text-danger col-12"/>
+              <label class="col-12 text-start">status</label>
+              <select class="col-12" v-model="taskStatusId">
+                <option v-for="ts in taskStatus" :key="ts.id" :value="ts.id">{{ts.name}}</option>
+              </select>
+              <label class="col-12 text-start">start date</label>
+              <Field name="startDate" class="col-12" type="date" v-model="startDate"/>
+              <label class="col-12 text-start">end date</label>
+              <Field name="endDate" class="col-12" type="date" v-model="endDate" rules="endDateValidate:@startDate"/>
+              <ErrorMessage name="endDate" class="text-danger col-12"/>
+              <label class="col-12 text-start">content</label>
+              <textarea class="col-12" v-model="content" maxlength="255"></textarea>
             </div>
             <div class="modal-footer ms-5 me-5">
               <span class="col-12">

@@ -1,21 +1,13 @@
-<template>
-  <div class="oAuthButtons">
-    <button @click="googleAuth">Google</button>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import type {Auth} from 'firebase/auth';
 import { useRouter } from 'vue-router';
 import type { Router } from 'vue-router';
 import { axiosIncludedIdToken as axios } from '@/services/axiosIncludedIdToken';
-import { useStore } from '@/store';
 
 const router: Router               = useRouter()
 const auth: Auth                   = getAuth()
 const provider: GoogleAuthProvider = new GoogleAuthProvider()
-const store = useStore();
 
 type SigninParam = {
   idToken?: string;
@@ -29,7 +21,7 @@ const googleAuth = () => {
     const signinParam: SigninParam = { providerId: credential?.providerId };
     axios.post("/auth/oauthSignin",signinParam,{})
       .then((res) => {
-        successSignin(res.data);
+        successSignin();
       }).catch((err)=> {
         console.error(err.code + ": " + err.message);
       });
@@ -38,8 +30,14 @@ const googleAuth = () => {
   });
 }
 
-function successSignin(resposeData: any) :void{
+function successSignin() :void{
   console.log('signin');
   router.push('afterSignin');
 }
 </script>
+
+<template>
+  <div class="oAuthButtons">
+    <img src="@/assets/oauthButtons/btn_google_signin_dark_focus_web@2x.png" alt="GoogleOauthButton" class="mt-3" @click="googleAuth"/>
+  </div>
+</template>

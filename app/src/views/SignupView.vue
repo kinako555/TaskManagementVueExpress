@@ -1,15 +1,3 @@
-
-<template>
-  <div class="signup">
-    <h1>Signup</h1>
-    <input type="email" v-model="mailaddress" placeholder="email"/><br/>
-    <input type="password" v-model="password" placeholder="password"/><br/>
-    <button @click="signup">Signup</button><br/>
-    <router-link to="/signin">Go to Signin Page</router-link>
-    <OAuthButtons />
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { Ref } from 'vue'
@@ -20,15 +8,17 @@ import type {Auth} from 'firebase/auth'
 import OAuthButtons from '@/components/auth/OAuthButtons.vue'
 import { axiosIncludedIdToken as axios } from '@/services/axiosIncludedIdToken';
 import type { UserCredential } from 'firebase/auth';
-import { useStore } from '@/store';
+import { Form, Field, ErrorMessage } from 'vee-validate';
+import { getErrorMessage }  from '@/services/authErrorMessageService';
 
-let mailaddress: Ref<string> = ref('')
-let password:    Ref<string> = ref('')
-const router: Router = useRouter()
+const mailaddress:          Ref<string> = ref('');
+const password:             Ref<string> = ref('');
+const passwordConfirmation: Ref<string> = ref('');
+const authErrorMessage: Ref<string> = ref('');
+const router: Router = useRouter();
 const auth: Auth = getAuth();
-const store = useStore();
 
-const signup = () => {
+const submit = () => {
   createUserWithEmailAndPassword (auth, mailaddress.value, password.value)
   .then(async (userCredential: UserCredential) => {
     axios.post("/auth/signin")
@@ -40,7 +30,62 @@ const signup = () => {
       });
   })
   .catch((error) => {
+    const message = getErrorMessage(error.code);
+    if (message) authErrorMessage.value = message;
     console.error(error.code + ': ' + error.message);
   });
 }
 </script>
+
+<template>
+  <div class="signup">
+    <div class="container mt-5">
+      <div class="offset-4 col-4">
+        <div class="col-12">
+          <h1>Signup</h1>
+        </div>
+        <Form @submit="submit">
+          <div class="col-12 text-start">
+            <label class="">Email</label>
+          </div>
+          <div class="col-12">
+            <Field name="email" type="email" v-model="mailaddress" rules="required|email" class="w-100"/>
+          </div>
+          <div class="col-12 text-start text-danger">
+            <ErrorMessage name="email" />
+          </div>
+          <div class="col-12 text-start">
+            <label>Password</label>
+          </div>
+          <div class="col-12">
+            <Field name="password" rules="required" type="password" v-model="password" class="w-100"/>
+          </div>
+          <div class="col-12 text-start text-danger">
+            <ErrorMessage name="password" />
+          </div>
+          <div class="col-12 text-start">
+            <label>Password Confirmation</label>
+          </div>
+          <div class="col-12">
+            <Field name="passwordConfirmation" rules="required|confirmed:@password" type="password" v-model="passwordConfirmation" class="w-100"/>
+          </div>
+          <div class="col-12 text-start text-danger">
+            <ErrorMessage name="passwordConfirmation"/>
+          </div>
+          <div class="col-12 mt-3">
+            <button type="submit" class="w-100">Signup</button>
+          </div>
+          <div class="col-12 text-start" v-if="authErrorMessage">
+            <span class="text-danger">{{authErrorMessage}}</span>
+          </div>
+        </Form>
+        <div class="col-12 mt-3">
+          <router-link to="/signin">Go To Signin Page</router-link>
+        </div>
+        <span class="col-12"><OAuthButtons /></span>
+      </div>
+      <div class="col-4">
+      </div>
+    </div>
+  </div>
+</template>
