@@ -1,7 +1,6 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import type { RouteLocationNormalized, NavigationGuardNext } from 'vue-router'
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import type { RouteLocationNormalized, NavigationGuardNext } from 'vue-router';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import HomeView from '../views/HomeView.vue'
 
 /***
  * meta

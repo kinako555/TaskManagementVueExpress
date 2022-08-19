@@ -1,24 +1,25 @@
-# src
+# Task Management Site
 
-## Project setup
-```
-npm install
-```
+## 開発環境 
+firebase authを利用しています   
+docker,docker-composeを事前に導入しておいてください    
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+### 事前準備ファイル
+firebase authの設定ファイルをそれぞれ配置してください
 
-### Compiles and minifies for production
 ```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
+# Server Side
+:projectDirectory/api/config/vuefirebasefb-firebase-adminsdk.json
+# Client Side
+:projectDirectory/app/src/firebase.ts
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### サーバー起動
+```
+docker compose up -d
+```
+
+### DBに事前に必要なデータを登録する
+```
+docker compose exec api npx type-orm-ts-node-commonjs migration:run -d ./data-source.ts
+```

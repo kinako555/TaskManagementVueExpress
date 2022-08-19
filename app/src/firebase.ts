@@ -24,7 +24,7 @@ const firebaseConfig = {
  * アプリ起動時にこの関数を実行する必要がある
  */
 const initializeFirebase =()=> {
-  initializeApp(firebaseConfig)
+  initializeApp(firebaseConfig);
 }
 
 export {initializeFirebase}
