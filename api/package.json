@@ -3,7 +3,8 @@
    "version": "0.0.0",
    "private": true,
    "scripts": {
-      "start": "nodemon"
+      "start": "nodemon",
+      "production_start": "tsc & ./dist/bin/www.js"
    },
    "dependencies": {
       "@types/cookie-parser": "^1.4.3",
