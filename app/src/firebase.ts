@@ -7,13 +7,12 @@ import { initializeApp } from "firebase/app";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey:            "AIzaSyDytUSh1JdhfOX3BU9acWCMtZXbGd_QtXM",
-  authDomain:        "vuefirebasefb.firebaseapp.com",
-  projectId:         "vuefirebasefb",
-  storageBucket:     "vuefirebasefb.appspot.com",
-  messagingSenderId: "127784906731",
-  appId:             "1:127784906731:web:04999b905e28fff498f3ae",
-  measurementId:     "G-55TJKQ9QP9"
+  apiKey:            process.env.VUE_APP_API_KEY,
+  authDomain:        process.env.VUE_APP_AUTH_DOMAIN,
+  projectId:         process.env.VUE_APP_PROJECT_ID,
+  storageBucket:     process.env.VUE_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.VUE_APP_MESSAGING_SEND_ID,
+  appId:             process.env.VUE_APP_APP_ID,
 };
 
 // Initialize Firebase

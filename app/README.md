@@ -1,4 +1,8 @@
 # src
+## 事前準備
+```bash
+$ docker compose run --rm app npm install
+```
 
 ## Project setup
 ```

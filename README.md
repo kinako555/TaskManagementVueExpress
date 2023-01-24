@@ -1,10 +1,13 @@
 # Task Management Site
+簡単なタスク管理webシステム
 
 ## 開発環境 
 firebase authを利用しています   
 docker,docker-composeを事前に導入しておいてください    
 
-### 事前準備ファイル
+### 事前準備
+appフォルダ apiフォルダのREADMEを参考にしてください
+
 firebase authの設定ファイルをそれぞれ配置してください
 
 ```
