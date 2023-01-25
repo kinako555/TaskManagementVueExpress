@@ -28,7 +28,7 @@ services:
     tty: true
     environment:
       CHOKIDAR_USEPOLLING: 1
-      GOOGLE_APPLICATION_CREDENTIALS: /api/config/vuefirebasefb-firebase-adminsdk.json
+      GOOGLE_APPLICATION_CREDENTIALS: /api/config/task-management-firebase-adminsdk.json
       TZ: Asia/Tokyo
       NODE_ENV: develop
     depends_on:

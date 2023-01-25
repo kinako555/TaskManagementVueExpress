@@ -44,6 +44,7 @@ const submit = () => {
         <div class="col-12">
           <h1>Signin</h1>
         </div>
+        <!--
         <Form @submit="submit">
           <div class="col-12 text-start">
             <label class="">Email</label>
@@ -73,6 +74,7 @@ const submit = () => {
         <div class="col-12 mt-3">
           <router-link to="/signup">Go To Signup Page</router-link>
         </div>
+        -->
         <span class="col-12"><OAuthButtons /></span>
       </div>
     </div>

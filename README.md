@@ -1,28 +1,32 @@
 # Task Management Site
 簡単なタスク管理webシステム
 
+## 使用技術
+- Firebase Authentication
+- Vue(Client) 
+- Express(Backend)
+- Mysql(DB)
+
 ## 開発環境 
-firebase authを利用しています   
 docker,docker-composeを事前に導入しておいてください    
 
 ### 事前準備
-appフォルダ apiフォルダのREADMEを参考にしてください
-
-firebase authの設定ファイルをそれぞれ配置してください
-
+1. firebaseプロジェクトを作成し、WEBアプリを設定する
+2. Docker imageビルド 
+```bash
+$ docker compose build
 ```
-# Server Side
-:projectDirectory/api/config/vuefirebasefb-firebase-adminsdk.json
-# Client Side
-:projectDirectory/app/src/firebase.ts
-```
+3. appフォルダ apiフォルダのREADMEを参考にしてください
 
 ### サーバー起動
-```
-docker compose up -d
+事前準備完了後、以下のコマンドでサーバー起動
+```bash
+# プロジェクトルートディレクトリで実行してください
+# localhost:8080
+$ docker compose up -d
+# DBに事前に必要なデータを登録する(最初だけ実行してくただい)
+$ docker compose run --rm api npx typeorm-ts-node-commonjs migration:run -d ./data-source.ts
 ```
 
-### DBに事前に必要なデータを登録する
-```
-docker compose exec api npx type-orm-ts-node-commonjs migration:run -d ./data-source.ts
-```
+### システム内容
+![システム内容](./system.png "システム内容")
