@@ -1,5 +1,6 @@
 # Task Management Site
-簡単なタスク管理webシステム
+プログラミング練習用の簡単なタスク管理webシステム   
+テスト作成中
 
 ## 使用技術
 - Firebase Authentication
