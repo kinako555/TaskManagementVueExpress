@@ -6,6 +6,7 @@ import { Task } from "./entity/task"
 
 let AppDataSource: DataSource;
 
+// migration用にtest環境以外はexportする
 if (process.env.NODE_ENV == 'production') {
   AppDataSource = new DataSource({
     type: "mysql",
@@ -36,6 +37,29 @@ if (process.env.NODE_ENV == 'production') {
   });
 }
 
+const testAppDataSource = new DataSource({
+  type: "mysql",
+  host: "db",
+  port: 3306,
+  username: "root",
+  password: "",
+  database: "ExpressTest-test",
+  synchronize: true,
+  logging: false,
+  entities: [User, TaskStatus, Task],
+  subscribers: [],
+});
 
+const getAppDataSource = ((): DataSource=>{
+  switch (process.env.NODE_ENV) {
+    case "production":
+    case "develop":
+      return AppDataSource;
+    case "test":
+      return testAppDataSource;
+    default:
+      return testAppDataSource;
+  }
+});
 
-export {AppDataSource};
+export {AppDataSource, getAppDataSource};
