@@ -2,6 +2,7 @@
 import { ref, defineEmits } from "vue";
 import type { Ref } from "vue";
 import { axiosIncludedIdToken as axios } from '../services/axiosIncludedIdToken';
+import { Task } from "@/models/task";
 
 const emits = defineEmits(['setTasks']);
 
@@ -12,7 +13,10 @@ function submit(): void {
   const queryParameter: string = formatQueryParameter(searchWord.value);
   axios.get('/tasks'+queryParameter)
   .then((res) => {
-    emits( 'setTasks', res.data.tasks);
+    const tasks: Map<number, Task> = new Map<number, Task>();
+    //ObjectからMap<number, Task>への変換
+    Object.keys(res.data.tasks).forEach((id: string) => { tasks.set(Number(id), new Task(res.data.tasks[id])) });
+    emits( 'setTasks', tasks);
   }).catch((error) =>{
     console.error(error.code + ": " + error.message);
     alert('エラーが発生しました。プラウザをリロードしてください');

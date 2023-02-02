@@ -4,8 +4,12 @@ import type { Ref } from "vue";
 import { axiosIncludedIdToken as axios } from '../services/axiosIncludedIdToken';
 import { Modal } from 'bootstrap';
 import { Form, Field, ErrorMessage } from 'vee-validate';
+import { Task } from "@/models/task";
+import { TaskStatus } from "@/models/taskStatus";
 
 const modalId = 'editTaskModal';
+const defalutTaskStatusId = TaskStatus.ID.OUT_STANDING;
+
 let modal: any;
 
 /* モーダル表示実装側でこの関数を参照してください */
@@ -20,14 +24,14 @@ defineExpose({openModal});
 const props = defineProps(['taskStatus']);
 const emit = defineEmits(['updateTask']);
 
-let taskId: string;
+let taskId: number;
 const title: Ref<string>        = ref('');
-const taskStatusId: Ref<string> = ref('');
+const taskStatusId: Ref<number> = ref(defalutTaskStatusId);
 const startDate: Ref<Date|null> = ref(null);
 const endDate: Ref<Date|null>   = ref(null);
 const content: Ref<string>      = ref('');
 
-function setDefaultValues(editTask: any): void{
+function setDefaultValues(editTask: Task): void{
   taskId             = editTask.id;
   title.value        = editTask.title;
   taskStatusId.value = editTask.taskStatusId;
@@ -43,17 +47,17 @@ function closeModal(): void{
 /* 第一引数は使用していないがvee validateの仕様のため設定 */
 function submit(value: any, {resetForm}: any): void{
   const formData = {
-    task: {
+    task: new Task({
       title: title.value,
       taskStatusId: taskStatusId.value,
       startDate: startDate.value,
       endDate: endDate.value,
       content: content.value
-    }
+    })
   };
   axios.patch('/tasks/'+taskId, formData).then((res) => {
     console.log('update task');
-    emit('updateTask', res.data.updatedTask);
+    emit('updateTask', new Task(res.data.updatedTask));
     closeModal();
     resetForm();
   }).catch((error) => {
@@ -80,7 +84,7 @@ function submit(value: any, {resetForm}: any): void{
               <ErrorMessage name="title" class="text-danger col-12"/>
               <label class="col-12 text-start">status</label>
               <select class="col-12" v-model="taskStatusId">
-                <option v-for="ts in taskStatus" :key="ts.id" :value="ts.id">{{ts.name}}</option>
+                <option v-for="[key, ts] in taskStatus" :key="key" :value="ts.id">{{ts.name}}</option>
               </select>
               <label class="col-12 text-start">start date</label>
               <Field name="startDate" class="col-12" type="date" v-model="startDate"/>

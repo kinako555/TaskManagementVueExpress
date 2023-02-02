@@ -2,12 +2,13 @@
 import { defineExpose, ref} from "vue";
 import type { Ref } from "vue";
 import { Modal } from 'bootstrap';
+import { Task } from "@/models/task";
 
 const modalId = 'showTaskContentModal';
 let modal: any;
 
 /* モーダル表示実装側でこの関数を参照してください */
-const openModal: Ref<(task: any)=> void> = ref((task) => {
+const openModal: Ref<(task: Task)=> void> = ref((task) => {
   setDefaultValues(task);
   modal = new Modal(document.getElementById(modalId) as HTMLElement);
   modal.show();
@@ -18,7 +19,7 @@ defineExpose({openModal});
 const title: Ref<string>   = ref('');
 const content: Ref<string> = ref('');
 
-function setDefaultValues(task: any): void{
+function setDefaultValues(task: Task): void{
   title.value   = task.title;
   content.value = task.content;
 }

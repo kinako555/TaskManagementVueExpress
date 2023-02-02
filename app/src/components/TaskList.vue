@@ -5,7 +5,7 @@ import { axiosIncludedIdToken as axios } from '../services/axiosIncludedIdToken'
 defineProps(['tasks', 'getTaskStatusName']);
 const emit = defineEmits(['deleteTask', 'editTask', 'showTaskContent']);
 
-function deleteTask(taskId: string): void {
+function deleteTask(taskId: number): void {
   axios.delete('/tasks/'+taskId).then((res) => {
     console.log('delete task');
     emit('deleteTask', taskId);
@@ -15,11 +15,11 @@ function deleteTask(taskId: string): void {
   });
 }
 
-function editTask(taskId: string): void {
+function editTask(taskId: number): void {
   emit('editTask', taskId);
 }
 
-function showTaskContent(taskId: string): void {
+function showTaskContent(taskId: number): void {
   emit('showTaskContent', taskId);
 }
 
@@ -30,7 +30,6 @@ function showTaskContent(taskId: string): void {
     <table class="table w-100">
       <thead>
         <tr>
-          <th scope="col">No</th>
           <th scope="col">Title</th>
           <th scope="col">Content</th>
           <th scope="col">Start Date</th>
@@ -40,8 +39,7 @@ function showTaskContent(taskId: string): void {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(task, key, i) in tasks" :key="task.id">
-          <th scope="row">{{ Number(i)+1 }}</th>
+        <tr v-for="[key, task] in tasks" :key="key">
           <td>{{ task.title }}</td>
           <td><i class="fa-solid fa-crop-simple" @click="showTaskContent(task.id)"></i></td>
           <td>{{ task.startDate }}</td>
