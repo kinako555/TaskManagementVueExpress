@@ -10,6 +10,12 @@ let spy: jest.SpyInstance;
 const BEFORE_CREATE_USER_COUNT: number = 5;
 const userRepository: Repository<User> = AppDataSource.getRepository(User);
 
+const firstUser = (async(): Promise<User> =>{
+  let users: User[] = await userRepository.find(); 
+  return users[0];
+});
+
+
 beforeAll(async()=>{
   await AppDataSource.initialize();
   await Seeder.allDelete();
@@ -43,5 +49,15 @@ describe('POST /auth/oauthSignin', (): void => {
     expect(User.DeleteFlgValue.FALSE.equals(user.deleteFlg)).toBe(true);
     const usersCount: number = await userRepository.count();
     expect(usersCount).toBe(BEFORE_CREATE_USER_COUNT+1);
+  });
+  
+  test('usersTBLにレコードのあるユーザーならusersレコードは作成されない', async() => {
+    const signinUser: User =  await firstUser();
+    spy = setFirebaseAuthMock({uid: signinUser.id, name: signinUser.name});
+    expect.assertions(1);
+    const requestParams = {providerId: "testProvider"};
+    await request(app).post("/auth/oauthSignin").send(requestParams);
+    const usersCount: number = await userRepository.count();
+    expect(usersCount).toBe(BEFORE_CREATE_USER_COUNT);
   });
 });
