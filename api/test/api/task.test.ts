@@ -116,3 +116,63 @@ describe('POST /tasks/create', ():void => {
   });
 
 });
+
+describe('PATCH /tasks/[:taskId]', ():void => {
+  test('タスクを更新するとtasksTBLレコード総数は変わらず、タスクが更新される', async()=>{
+    const signinUser = await firstUser();
+    spy = setFirebaseAuthMock({uid: signinUser.id, name: signinUser.name});
+    const beforeAllTasksCount = (await taskRepository.find()).length;
+    const beforeTask: Task = (await taskRepository.find({where:{userId: signinUser.id}}))[0];
+    const updateTaskParams ={
+      title       : "updatedTitle",
+      content     : "updatedCotent",
+      taskStatusId: getUpdateTaskStatusId(beforeTask.taskStatusId),
+      startDate   : "2024-04-03",
+      endDate     : "2024-04-03",
+    } as const
+    await request(app).patch(`/tasks/${beforeTask.id}`).send({task: updateTaskParams});
+    const afterTask = await taskRepository.findOneOrFail({where: {id: beforeTask.id}});
+    expect(afterTask.title).toBe(updateTaskParams.title);
+    expect(afterTask.content).toBe(updateTaskParams.content);
+    expect(afterTask.taskStatusId).toBe(updateTaskParams.taskStatusId);
+    expect(afterTask.startDate).toBe(updateTaskParams.startDate);
+    expect(afterTask.endDate).toBe(updateTaskParams.endDate);
+
+    // tasksTBLの総レコード数がかわっていないか確認
+    const afterAllTasksCount = (await taskRepository.find()).length;
+    expect(afterAllTasksCount).toBe(beforeAllTasksCount);
+  });
+
+  test('異なるユーザーIDを更新項目に指定しても、タスクのユーザーIDは更新されない', async()=>{
+    const users: User[] = await userRepository.find();
+    const signinUser = users[0];
+    spy = setFirebaseAuthMock({uid: signinUser.id, name: signinUser.name});
+    const beforeAllTasksCount = (await taskRepository.find()).length;
+    const beforeTask: Task = (await taskRepository.find({where:{userId: signinUser.id}}))[0];
+    const otherUser = users[1];
+    const updateTaskParams ={
+      title       : "updatedTitle",
+      content     : "updatedCotent",
+      userId      : otherUser.id,
+      taskStatusId: getUpdateTaskStatusId(beforeTask.taskStatusId),
+      startDate   : "2024-04-03",
+      endDate     : "2024-04-03",
+    } as const
+    await request(app).patch(`/tasks/${beforeTask.id}`).send({task: updateTaskParams});
+    const afterTask = await taskRepository.findOneOrFail({where: {id: beforeTask.id}});
+    expect(afterTask.userId).toBe(signinUser.id);
+
+    // tasksTBLの総レコード数がかわっていないか確認
+    const afterAllTasksCount = (await taskRepository.find()).length;
+    expect(afterAllTasksCount).toBe(beforeAllTasksCount);
+  });
+});
+
+  /**
+ * 更新前と同じタスクステータスIDを設定してしまわないよう、
+ * 更新するタスクステータスIDを取得する処理
+ * 値は適当
+ */
+const getUpdateTaskStatusId = ((beforeTaskStatusId: number): number=>{
+  return beforeTaskStatusId === TaskStatus.ID.DURING ? TaskStatus.ID.PENDING : TaskStatus.ID.DURING
+});
