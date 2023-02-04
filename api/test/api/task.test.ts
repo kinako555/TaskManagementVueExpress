@@ -168,6 +168,39 @@ describe('PATCH /tasks/[:taskId]', ():void => {
   });
 });
 
+describe('DELETE /tasks/[:taskId]', ():void => {
+  test('ログインユーザーの指定したタスクIDのタスクが削除される', async()=>{
+    const signinUser = await firstUser();
+    spy = setFirebaseAuthMock({uid: signinUser.id, name: signinUser.name});
+    const beforeAllTasksCount = (await taskRepository.find()).length;
+    const deleteTask: Task = (await taskRepository.find({where:{userId: signinUser.id}}))[0];
+    await request(app).delete(`/tasks/${deleteTask.id}`).send();
+    // tasksTBLレコードから削除されているか
+    const resultTasks: Task[] = await taskRepository.find({where:{id: deleteTask.id}});
+    expect(resultTasks.length).toBe(0);
+    // 1レコードだけ減っているかの確認
+    const afterAllTasksCount = (await taskRepository.find()).length;
+    expect(afterAllTasksCount).toBe(beforeAllTasksCount-1);
+  });
+
+  test('他ユーザーのタスクは削除できない', async()=>{
+    const users: User[] = await userRepository.find();
+    const signinUser = users[0];
+    spy = setFirebaseAuthMock({uid: signinUser.id, name: signinUser.name});
+    const beforeAllTasksCount = (await taskRepository.find()).length;
+    const otherUser = users[1];
+    const otherUserTask: Task = (await taskRepository.find({where:{userId: otherUser.id}}))[0];
+    
+    await request(app).delete(`/tasks/${otherUserTask.id}`).send();
+    const resultTasks: Task[] = await taskRepository.find({where:{id: otherUserTask.id}});
+    expect(resultTasks.length).toBe(1);
+
+    // レコード数が変わっていないか確の認
+    const afterAllTasksCount = (await taskRepository.find()).length;
+    expect(afterAllTasksCount).toBe(beforeAllTasksCount);
+  });
+});
+
   /**
  * 更新前と同じタスクステータスIDを設定してしまわないよう、
  * 更新するタスクステータスIDを取得する処理

@@ -1,6 +1,5 @@
 # Task Management Site
 プログラミング練習用の簡単なタスク管理webシステム   
-テスト作成中
 
 ## 使用技術
 - Firebase Authentication
@@ -27,6 +26,12 @@ $ docker compose build
 $ docker compose up -d
 # DBに事前に必要なデータを登録する(最初だけ実行してくただい)
 $ docker compose run --rm api npx typeorm-ts-node-commonjs migration:run -d ./data-source.ts
+```
+
+### テスト(APIテストのみ)
+```bash
+# コンテナ起動時
+$ docker compose exec api test
 ```
 
 ### システム内容

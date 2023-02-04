@@ -94,7 +94,6 @@ export async function deleteTask(req:  express.Request,
 function formatFindOptionsWhere(queryParameter: any) :FindOptionsWhere<Task> {
   let findOptionWhere: FindOptionsWhere<Task> = {};
   const title: string = queryParameter.title;
-  console.log(title);
   if (title) findOptionWhere['title'] = Like("%"+title+"%");
   return findOptionWhere;
 }
