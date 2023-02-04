@@ -16,14 +16,20 @@ export class Task {
 
   @ManyToOne(() => User, (user) => user.tasks, {
     nullable: false,
-    cascade: ['remove','update']
+    cascade: ["insert","update","remove"],
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE"
   })
   @JoinColumn({ name: 'user_id' })
   user: User;
+  @Column({ name: 'user_id' })
+  userId: string;
 
   @ManyToOne(() => TaskStatus, (taskStatus: TaskStatus) => taskStatus.tasks, {
     nullable: false,
-    cascade: ['update']
+    cascade: ["insert","update","remove"],
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE"
   })
   @JoinColumn({ name: 'task_status_id' })
   taskStatus: TaskStatus;

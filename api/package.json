@@ -4,7 +4,16 @@
    "private": true,
    "scripts": {
       "start": "nodemon",
-      "production_start": "tsc & ./dist/bin/www.js"
+      "production_start": "tsc & ./dist/bin/www.js",
+      "test": "NODE_ENV=test jest --runInBand --forceExit"
+   },
+   "jest": {
+      "transform": {
+         ".(ts|tsx)": "ts-jest"
+      },
+      "testMatch": [
+         "**/test/**/*.test.(ts|tsx)"
+      ]
    },
    "dependencies": {
       "@types/cookie-parser": "^1.4.3",

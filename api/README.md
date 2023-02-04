@@ -15,6 +15,6 @@
 $ docker compose run --rm api npm install
 ```
 
-4. DBコンテナで「ExpressTest」を作成する(詳細省略)
+4. DBコンテナで「ExpressTest, ExpressTest-test」データベースを作成する(詳細省略)
 
 
